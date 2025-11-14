@@ -38,12 +38,21 @@ export default function AboutPage() {
                                 generations, combined with warm hospitality that makes every guest feel like family.
                             </p>
 
-                            <h3 className="text-3xl font-bold mb-4 mt-8">Our Story</h3>
+                            <h3 className="text-3xl font-bold mb-4 mt-8">Who We Are</h3>
                             <p className="text-gray-700 leading-relaxed mb-6">
-                                Founded with a passion for sharing Ethiopian culture through food, Ajora Ethiopian
-                                Kitchen has become a beloved destination for authentic Ethiopian cuisine. Every dish
-                                is prepared with traditional recipes and the finest ingredients, ensuring an
-                                unforgettable dining experience.
+                                Ajora Ethiopian Kitchen is a beloved restaurant known for bringing the bold and
+                                authentic flavors of Ethiopian cuisine to the community. Named after the twin
+                                waterfalls in Wolaita, Southern Ethiopia, Ajora represents not just food, but
+                                culture, tradition, and hospitality. Our menu showcases a variety of classic
+                                Ethiopian dishes, from hearty beef and chicken platters to flavorful vegetarian
+                                options, all served with our signature injera bread.
+                            </p>
+                            <p className="text-gray-700 leading-relaxed mb-6">
+                                For years, Ajora Ethiopian Kitchen has been a go-to spot for those craving rich,
+                                spice-infused stews, slow-cooked meats, and the communal dining experience that
+                                Ethiopian food is known for. Whether it's our perfectly seasoned Doro Wot (spicy
+                                chicken stew), tender beef tibs, or a combination platter with an assortment of
+                                flavors, we aim to serve dishes that bring people together.
                             </p>
 
                             <h3 className="text-3xl font-bold mb-4 mt-8">What Makes Us Special</h3>
