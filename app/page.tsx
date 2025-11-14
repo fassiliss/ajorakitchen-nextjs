@@ -23,28 +23,34 @@ export default function Home() {
 
             {/* Content */}
             <div className="relative z-10 text-center text-white px-4">
-                <h1 className="text-6xl md:text-8xl font-bold mb-4">Ajorakitchen</h1>
-                <p className="text-2xl md:text-3xl mb-8">Delicious Food, Memorable Moments</p>
-                <div className="space-x-4">
+                <h1 className="text-6xl md:text-8xl font-bold mb-6">Ajora Ethiopian kitchen</h1>
 
-                   <a href="#menu"
-                    className="inline-block bg-white text-red-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition"
-                    >
-                    View Menu
-                </a>
-
-                <a
-                    href="/reservation"
-                className="inline-block bg-transparent border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-red-600 transition"
-               >
-
-
-                Book a Table
-                </a>
-
+                {/* Logo in the middle */}
+                <div className="flex justify-center mb-6">
+                    <img
+                        src="/images/ajora-1.webp"
+                        alt="Ajora Ethiopian Kitchen Logo"
+                        className="w-32 h-32 md:w-40 md:h-40 rounded-full shadow-2xl"
+                    />
                 </div>
 
-        </div>
+                <p className="text-2xl md:text-3xl mb-8">Delicious Food, Memorable Moments</p>
+
+                <div className="space-x-4">
+                    <a
+                        href="#menu"
+                        className="inline-block bg-white text-red-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition"
+                    >
+                        View Menu
+                    </a>
+                    <a
+                        href="/reservation"
+                        className="inline-block bg-transparent border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-red-600 transition"
+                    >
+                        Book a Table
+                    </a>
+                </div>
+            </div>
 
     {/* Scroll Down Arrow */}
     <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce z-10">
