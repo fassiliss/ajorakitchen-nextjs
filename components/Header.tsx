@@ -6,8 +6,13 @@ export default function Header() {
             <nav className="container mx-auto px-4 py-4">
                 <div className="flex items-center justify-between">
                     {/* Logo */}
-                    <Link href="/" className="text-3xl font-bold text-red-600">
-                        Ajorakitchen
+                    <Link href="/" className="flex items-center gap-3">
+                        <img
+                            src="/images/ajora-1.webp"
+                            alt="Ajora Ethiopian Kitchen"
+                            className="h-12 w-12 object-contain"
+                        />
+                        <span className="text-2xl font-bold text-red-600">Ajorakitchen</span>
                     </Link>
 
                     {/* Desktop Navigation */}

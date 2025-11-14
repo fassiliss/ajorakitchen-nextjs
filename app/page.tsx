@@ -39,7 +39,7 @@ export default function Home() {
                 <div className="space-x-4">
                     <a
                         href="#menu"
-                        className="inline-block bg-white text-red-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition"
+                        className="inline-block bg-transparent border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-red-600 transition"
                     >
                         View Menu
                     </a>
@@ -82,9 +82,11 @@ export default function Home() {
                         </p>
                     </div>
                     <div>
-                        <div className="bg-gray-200 h-64 rounded-lg flex items-center justify-center">
-                            <span className="text-gray-500">Restaurant Image</span>
-                        </div>
+                        <img
+                            src="/images/ajora-2.png"
+                            alt="Ajora Ethiopian Kitchen Interior"
+                            className="w-full h-64 object-cover rounded-lg shadow-lg"
+                        />
                     </div>
                 </div>
             </div>
@@ -102,9 +104,11 @@ export default function Home() {
             <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
                 {/* Menu Item 1 */}
                 <div className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition">
-                    <div className="h-48 bg-gray-200 flex items-center justify-center">
-                        <span className="text-gray-500">Food Image</span>
-                    </div>
+                    <img
+                        src="/images/ajora-3.png"
+                        alt="Special Dish"
+                        className="h-48 w-full object-cover"
+                    />
                     <div className="p-6">
                         <h3 className="text-2xl font-bold mb-2">Special Dish</h3>
                         <p className="text-gray-600 mb-4">Delicious and flavorful, made with love</p>
@@ -119,9 +123,11 @@ export default function Home() {
 
                 {/* Menu Item 2 */}
                 <div className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition">
-                    <div className="h-48 bg-gray-200 flex items-center justify-center">
-                        <span className="text-gray-500">Food Image</span>
-                    </div>
+                    <img
+                        src="/images/ajora-4.png"
+                        alt="Special Dish"
+                        className="h-48 w-full object-cover"
+                    />
                     <div className="p-6">
                         <h3 className="text-2xl font-bold mb-2">Chef's Choice</h3>
                         <p className="text-gray-600 mb-4">Our chef's recommended specialty</p>
@@ -136,9 +142,11 @@ export default function Home() {
 
                 {/* Menu Item 3 */}
                 <div className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition">
-                    <div className="h-48 bg-gray-200 flex items-center justify-center">
-                        <span className="text-gray-500">Food Image</span>
-                    </div>
+                    <img
+                        src="/images/ajora-5.png"
+                        alt="Special Dish"
+                        className="h-48 w-full object-cover"
+                    />
                     <div className="p-6">
                         <h3 className="text-2xl font-bold mb-2">House Special</h3>
                         <p className="text-gray-600 mb-4">A customer favorite for years</p>
@@ -181,13 +189,15 @@ export default function Home() {
                 </div>
                 <div>
                     <h4 className="text-xl font-bold mb-4">Hours</h4>
-                    <p className="text-gray-400">Monday - Friday: 11am - 10pm</p>
-                    <p className="text-gray-400">Saturday: 10am - 11pm</p>
-                    <p className="text-gray-400">Sunday: 10am - 9pm</p>
+                    <p className="text-gray-400">Monday, Tuesday, Thursday: 9am - 8pm</p>
+                    <p className="text-gray-400">Wednesday: Closed</p>
+                    <p className="text-gray-400">Friday, Saturday: 9am - 9pm</p>
+                    <p className="text-gray-400">Sunday: 2pm - 8pm</p>
                 </div>
             </div>
             <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
                 <p>&copy; 2024 Ajorakitchen. All rights reserved.</p>
+                <p> Developed by Fassil Tsegaye</p>
             </div>
         </div>
     </footer>
