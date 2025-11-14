@@ -1,5 +1,5 @@
 import Header from '@/components/Header';
-
+import Footer from '@/components/Footer';
 export default function AboutPage() {
     return (
         <>
@@ -7,8 +7,20 @@ export default function AboutPage() {
 
             <div className="pt-20">
                 {/* Hero */}
-                <section className="bg-gradient-to-r from-red-600 to-orange-500 text-white py-20">
-                    <div className="container mx-auto px-4 text-center">
+                {/* Hero */}
+                <section
+                    className="relative py-32"
+                    style={{
+                        backgroundImage: "url(/images/ajora_banner.png)",
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                    }}
+                >
+                    {/* Dark overlay */}
+                    <div className="absolute inset-0 bg-black opacity-60"></div>
+
+                    {/* Content */}
+                    <div className="relative z-10 container mx-auto px-4 text-center text-white">
                         <h1 className="text-5xl md:text-6xl font-bold mb-4">About Us</h1>
                         <p className="text-xl">Our Story & Tradition</p>
                     </div>
@@ -56,11 +68,7 @@ export default function AboutPage() {
                 </section>
             </div>
 
-            <footer className="bg-gray-900 text-white py-12">
-                <div className="container mx-auto px-4 text-center">
-                    <p>&copy; 2024 Ajora Ethiopian Kitchen. All rights reserved.</p>
-                </div>
-            </footer>
+            <Footer />
         </>
     );
 }
