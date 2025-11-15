@@ -36,6 +36,13 @@ export default function ReservationPage() {
 
             if (error) throw error;
 
+            // Send email notification
+            await fetch('/api/send-reservation-email', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData),
+            });
+
             // Success!
             setSuccess(true);
             setFormData({
