@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { supabase } from '@/lib/supabase';
 
 export default function ReservationPage() {
     const [formData, setFormData] = useState({
@@ -15,6 +16,7 @@ export default function ReservationPage() {
     });
     const [submitting, setSubmitting] = useState(false);
     const [success, setSuccess] = useState(false);
+    const [error, setError] = useState('');
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -24,12 +26,18 @@ export default function ReservationPage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setSubmitting(true);
+        setError('');
 
-        // Simulate form submission
-        setTimeout(() => {
+        try {
+            // Save to Supabase
+            const { data, error } = await supabase
+                .from('reservations')
+                .insert([formData]);
+
+            if (error) throw error;
+
+            // Success!
             setSuccess(true);
-            setSubmitting(false);
-            // Reset form
             setFormData({
                 name: '',
                 email: '',
@@ -41,7 +49,11 @@ export default function ReservationPage() {
 
             // Hide success message after 5 seconds
             setTimeout(() => setSuccess(false), 5000);
-        }, 1000);
+        } catch (err: any) {
+            setError(err.message || 'Something went wrong. Please try again.');
+        } finally {
+            setSubmitting(false);
+        }
     };
 
     return (
@@ -49,7 +61,6 @@ export default function ReservationPage() {
             <Header />
 
             <div className="pt-20">
-                {/* Hero */}
                 {/* Hero */}
                 <section
                     className="relative py-32"
@@ -59,10 +70,8 @@ export default function ReservationPage() {
                         backgroundPosition: "center",
                     }}
                 >
-                    {/* Dark overlay */}
                     <div className="absolute inset-0 bg-black opacity-60"></div>
 
-                    {/* Content */}
                     <div className="relative z-10 container mx-auto px-4 text-center text-white">
                         <h1 className="text-5xl md:text-6xl font-bold mb-4">Reservations</h1>
                         <p className="text-xl">Book a table online. Your request will be confirmed shortly.</p>
@@ -74,8 +83,15 @@ export default function ReservationPage() {
                     <div className="container mx-auto px-4 max-w-5xl">
                         {success && (
                             <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-8 rounded">
-                                <p className="font-bold">✅ Form submitted successfully!</p>
+                                <p className="font-bold">✅ Reservation request received!</p>
                                 <p>We'll contact you shortly to confirm your reservation.</p>
+                            </div>
+                        )}
+
+                        {error && (
+                            <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-8 rounded">
+                                <p className="font-bold">❌ Error</p>
+                                <p>{error}</p>
                             </div>
                         )}
 
@@ -137,6 +153,10 @@ export default function ReservationPage() {
                                             className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent appearance-none"
                                         >
                                             <option value="">Pick a time</option>
+                                            <option value="9:00 AM">9:00 AM</option>
+                                            <option value="9:30 AM">9:30 AM</option>
+                                            <option value="10:00 AM">10:00 AM</option>
+                                            <option value="10:30 AM">10:30 AM</option>
                                             <option value="11:00 AM">11:00 AM</option>
                                             <option value="11:30 AM">11:30 AM</option>
                                             <option value="12:00 PM">12:00 PM</option>
@@ -144,6 +164,7 @@ export default function ReservationPage() {
                                             <option value="1:00 PM">1:00 PM</option>
                                             <option value="1:30 PM">1:30 PM</option>
                                             <option value="2:00 PM">2:00 PM</option>
+                                            <option value="2:30 PM">2:30 PM</option>
                                             <option value="5:00 PM">5:00 PM</option>
                                             <option value="5:30 PM">5:30 PM</option>
                                             <option value="6:00 PM">6:00 PM</option>
@@ -151,9 +172,6 @@ export default function ReservationPage() {
                                             <option value="7:00 PM">7:00 PM</option>
                                             <option value="7:30 PM">7:30 PM</option>
                                             <option value="8:00 PM">8:00 PM</option>
-                                            <option value="8:30 PM">8:30 PM</option>
-                                            <option value="9:00 PM">9:00 PM</option>
-                                            <option value="9:30 PM">9:30 PM</option>
                                         </select>
                                         <span className="absolute left-3 top-3.5 text-gray-400">🕐</span>
                                     </div>
@@ -244,7 +262,6 @@ export default function ReservationPage() {
                 </section>
             </div>
 
-            {/* Footer */}
             <Footer />
         </>
     );

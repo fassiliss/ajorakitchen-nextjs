@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { supabase } from '@/lib/supabase';
 
 export default function ContactPage() {
     const [formData, setFormData] = useState({
@@ -13,6 +14,7 @@ export default function ContactPage() {
     });
     const [submitting, setSubmitting] = useState(false);
     const [success, setSuccess] = useState(false);
+    const [error, setError] = useState('');
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -22,11 +24,18 @@ export default function ContactPage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setSubmitting(true);
+        setError('');
 
-        // Simulate form submission
-        setTimeout(() => {
+        try {
+            // Save to Supabase
+            const { data, error } = await supabase
+                .from('contact_messages')
+                .insert([formData]);
+
+            if (error) throw error;
+
+            // Success!
             setSuccess(true);
-            setSubmitting(false);
             setFormData({
                 name: '',
                 email: '',
@@ -35,7 +44,11 @@ export default function ContactPage() {
             });
 
             setTimeout(() => setSuccess(false), 5000);
-        }, 1000);
+        } catch (err: any) {
+            setError(err.message || 'Something went wrong. Please try again.');
+        } finally {
+            setSubmitting(false);
+        }
     };
 
     return (
@@ -115,9 +128,10 @@ export default function ContactPage() {
                                         <div>
                                             <h3 className="font-bold text-xl mb-1">Hours</h3>
                                             <div className="text-gray-600">
-                                                <p>Monday - Friday: 11:00 AM - 10:00 PM</p>
-                                                <p>Saturday: 10:00 AM - 11:00 PM</p>
-                                                <p>Sunday: 10:00 AM - 9:00 PM</p>
+                                                <p>Monday, Tuesday, Thursday: 9am - 8pm</p>
+                                                <p>Wednesday: Closed</p>
+                                                <p>Friday, Saturday: 9am - 9pm</p>
+                                                <p>Sunday: 2pm - 8pm</p>
                                             </div>
                                         </div>
                                     </div>
@@ -148,6 +162,13 @@ export default function ContactPage() {
                                     <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded">
                                         <p className="font-bold">✅ Message sent successfully!</p>
                                         <p>We'll get back to you soon.</p>
+                                    </div>
+                                )}
+
+                                {error && (
+                                    <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded">
+                                        <p className="font-bold">❌ Error</p>
+                                        <p>{error}</p>
                                     </div>
                                 )}
 
@@ -245,7 +266,6 @@ export default function ContactPage() {
                 </section>
             </div>
 
-            {/* Footer */}
             <Footer />
         </>
     );
