@@ -17,7 +17,7 @@ export default function Header() {
                             alt="Ajora Ethiopian Kitchen"
                             className="h-12 w-12 object-contain"
                         />
-                        <span className="text-xl md:text-2xl font-bold text-red-600">Ajora</span>
+
                     </Link>
 
                     {/* Mobile Menu Button */}
@@ -65,6 +65,11 @@ export default function Header() {
                         <li>
                             <Link href="/about" className="text-gray-700 hover:text-red-600 transition">
                                 About
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href="/catering" className="text-gray-700 hover:text-red-600 transition">
+                                Catering
                             </Link>
                         </li>
                         <li>
@@ -117,6 +122,15 @@ export default function Header() {
                                     onClick={() => setIsOpen(false)}
                                 >
                                     About
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    href="/catering"
+                                    className="block text-gray-700 hover:text-red-600 transition py-2"
+                                    onClick={() => setIsOpen(false)}
+                                >
+                                    Catering
                                 </Link>
                             </li>
                             <li>
