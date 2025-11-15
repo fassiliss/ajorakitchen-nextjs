@@ -99,7 +99,7 @@ export default function ReservationPage() {
                             <div className="grid md:grid-cols-3 gap-6">
                                 {/* Date */}
                                 <div className="relative">
-                                    <label htmlFor="date" className="block text-gray-700 font-semibold mb-2">
+                                    <label htmlFor="date" className="block text-gray-900 font-semibold mb-2">
                                         Date
                                     </label>
                                     <div className="relative">
@@ -111,7 +111,7 @@ export default function ReservationPage() {
                                             onChange={handleChange}
                                             min={new Date().toISOString().split('T')[0]}
                                             required
-                                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent"
+                                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent text-gray-900 font-medium"
                                             placeholder="Pick a date"
                                         />
                                         <span className="absolute left-3 top-3.5 text-gray-400">📅</span>
@@ -120,7 +120,7 @@ export default function ReservationPage() {
 
                                 {/* Name */}
                                 <div className="relative">
-                                    <label htmlFor="name" className="block text-gray-700 font-semibold mb-2">
+                                    <label htmlFor="name" className="block text-gray-900 font-bold mb-2">
                                         Your Name
                                     </label>
                                     <div className="relative">
@@ -131,7 +131,7 @@ export default function ReservationPage() {
                                             value={formData.name}
                                             onChange={handleChange}
                                             required
-                                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent"
+                                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent text-gray-900 font-medium"
                                             placeholder="Full Name"
                                         />
                                         <span className="absolute left-3 top-3.5 text-gray-400">✏️</span>
@@ -140,7 +140,7 @@ export default function ReservationPage() {
 
                                 {/* Time */}
                                 <div className="relative">
-                                    <label htmlFor="time" className="block text-gray-700 font-semibold mb-2">
+                                    <label htmlFor="time" className="block text-gray-900 font-bold mb-2">
                                         Time
                                     </label>
                                     <div className="relative">
@@ -150,7 +150,7 @@ export default function ReservationPage() {
                                             value={formData.time}
                                             onChange={handleChange}
                                             required
-                                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent appearance-none"
+                                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent text-gray-900 font-medium"
                                         >
                                             <option value="">Pick a time</option>
                                             <option value="9:00 AM">9:00 AM</option>
@@ -179,7 +179,7 @@ export default function ReservationPage() {
 
                                 {/* Email */}
                                 <div className="relative">
-                                    <label htmlFor="email" className="block text-gray-700 font-semibold mb-2">
+                                    <label htmlFor="email" className="block text-gray-900 font-bold mb-2">
                                         Email Address
                                     </label>
                                     <div className="relative">
@@ -190,7 +190,7 @@ export default function ReservationPage() {
                                             value={formData.email}
                                             onChange={handleChange}
                                             required
-                                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent"
+                                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent text-gray-900 font-medium"
                                             placeholder="Your Email ID"
                                         />
                                         <span className="absolute left-3 top-3.5 text-gray-400">✉️</span>
@@ -199,7 +199,7 @@ export default function ReservationPage() {
 
                                 {/* Guests */}
                                 <div className="relative">
-                                    <label htmlFor="guests" className="block text-gray-700 font-semibold mb-2">
+                                    <label htmlFor="guests" className="block text-gray-900 font-bold mb-2">
                                         Guests
                                     </label>
                                     <div className="relative">
@@ -212,7 +212,7 @@ export default function ReservationPage() {
                                             min="1"
                                             max="20"
                                             required
-                                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent"
+                                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent text-gray-900 font-medium"
                                             placeholder="How many of you?"
                                         />
                                         <span className="absolute left-3 top-3.5 text-gray-400">👥</span>
@@ -221,7 +221,7 @@ export default function ReservationPage() {
 
                                 {/* Phone */}
                                 <div className="relative">
-                                    <label htmlFor="phone" className="block text-gray-700 font-semibold mb-2">
+                                    <label htmlFor="phone" className="block text-gray-900 font-bold mb-2">
                                         Phone Number
                                     </label>
                                     <div className="relative">
@@ -232,7 +232,7 @@ export default function ReservationPage() {
                                             value={formData.phone}
                                             onChange={handleChange}
                                             required
-                                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent"
+                                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent text-gray-900 font-medium"
                                             placeholder="Enter your Phone Number"
                                         />
                                         <span className="absolute left-3 top-3.5 text-gray-400">📞</span>
