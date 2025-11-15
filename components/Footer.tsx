@@ -23,8 +23,21 @@ export default function Footer() {
                         <p className="text-gray-400">Sunday: 2pm - 8pm</p>
                     </div>
                 </div>
-                <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-                    <p>&copy; 2024 Ajora Ethiopian Kitchen. All rights reserved.</p>
+                <div className="border-t border-gray-800 mt-8 pt-8">
+                    <div className="flex flex-col md:flex-row justify-between items-center text-gray-400 space-y-2 md:space-y-0">
+                        <p>&copy; 2025 Ajora Ethiopian Kitchen. All rights reserved.</p>
+                        <p>
+                            Full Stack Developer:{' '}
+                            <a
+                                href="https://www.fassiltsegaye.com"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-red-500 hover:text-red-400 transition"
+                            >
+                                www.fassiltsegaye.com
+                            </a>
+                        </p>
+                    </div>
                 </div>
             </div>
         </footer>
