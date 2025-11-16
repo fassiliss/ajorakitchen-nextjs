@@ -134,9 +134,12 @@ export default function Home() {
                         <p className="text-gray-600 mb-4">Our chef's recommended specialty</p>
                         <div className="flex justify-between items-center">
                             <span className="text-2xl font-bold text-red-600">$29.99</span>
-                            <button className="bg-red-600 text-white px-4 py-2 rounded-full hover:bg-red-700">
+                            <a
+                                href="/order"
+                                className="bg-red-600 text-white px-4 py-2 rounded-full hover:bg-red-700 inline-block text-center"
+                            >
                                 Order Now
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -178,5 +181,4 @@ export default function Home() {
 );
 }
 
-/*Qbk&qxLxCQLaP@7*/
-/*re_aSZpugFM_M1X9hFBB9waCDGaVmQpXvDzU*/
+
