@@ -27,7 +27,7 @@ export default function Footer() {
                     <div className="flex flex-col md:flex-row justify-between items-center text-gray-400 space-y-2 md:space-y-0">
                         <p>&copy; 2025 Ajora Ethiopian Kitchen. All rights reserved.</p>
                         <p>
-                            Full Stack Developer:{' '}
+                            Developed by:{' '}
                             <a
                                 href="https://www.fassiltsegaye.com"
                                 target="_blank"
