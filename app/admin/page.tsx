@@ -185,8 +185,21 @@ export default function AdminPage() {
                 {/* Hero */}
                 <section className="bg-red-600 text-white py-12">
                     <div className="container mx-auto px-4">
-                        <h1 className="text-4xl md:text-5xl font-bold mb-2">Admin Dashboard</h1>
-                        <p className="text-xl">Manage reservations, orders, messages, and catering requests</p>
+                        <div className="flex justify-between items-center">
+                            <div>
+                                <h1 className="text-4xl md:text-5xl font-bold mb-2">Admin Dashboard</h1>
+                                <p className="text-xl">Manage reservations, orders, messages, and catering requests</p>
+                            </div>
+                            <button
+                                onClick={async () => {
+                                    await fetch('/api/auth/logout', { method: 'POST' });
+                                    window.location.href = '/admin/login';
+                                }}
+                                className="bg-white text-red-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition"
+                            >
+                                🚪 Logout
+                            </button>
+                        </div>
                     </div>
                 </section>
 
