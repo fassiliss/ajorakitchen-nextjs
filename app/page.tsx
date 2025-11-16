@@ -115,9 +115,12 @@ export default function Home() {
                         <p className="text-gray-600 mb-4">Delicious and flavorful, made with love</p>
                         <div className="flex justify-between items-center">
                             <span className="text-2xl font-bold text-red-600">$24.99</span>
-                            <button className="bg-red-600 text-white px-4 py-2 rounded-full hover:bg-red-700">
+                            <a
+                                href="/order"
+                                className="bg-red-600 text-white px-4 py-2 rounded-full hover:bg-red-700 inline-block text-center"
+                            >
                                 Order Now
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -156,9 +159,12 @@ export default function Home() {
                         <p className="text-gray-600 mb-4">A customer favorite for years</p>
                         <div className="flex justify-between items-center">
                             <span className="text-2xl font-bold text-red-600">$19.99</span>
-                            <button className="bg-red-600 text-white px-4 py-2 rounded-full hover:bg-red-700">
+                            <a
+                                href="/order"
+                                className="bg-red-600 text-white px-4 py-2 rounded-full hover:bg-red-700 inline-block text-center"
+                            >
                                 Order Now
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
