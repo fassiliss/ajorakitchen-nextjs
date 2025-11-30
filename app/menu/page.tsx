@@ -69,7 +69,7 @@ export default function MenuPage() {
                 </section>
 
                 {/* Menu Section */}
-                <section className="py-20 bg-gray-50">
+                <section className="py-20 bg-gray-50 dark:bg-gray-900">
                     <div className="container mx-auto px-4 max-w-6xl">
 
                         {/* Filter Tags */}
@@ -81,7 +81,7 @@ export default function MenuPage() {
                                     className={`px-6 py-2 rounded-full font-semibold transition ${
                                         activeFilter === cat.id
                                             ? 'bg-red-600 text-white'
-                                            : 'bg-white text-gray-700 hover:bg-red-100'
+                                            : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-red-100 dark:hover:bg-gray-600'
                                     }`}
                                 >
                                     {cat.label}
@@ -92,16 +92,16 @@ export default function MenuPage() {
                         {/* Menu Items */}
                         <div className="grid md:grid-cols-2 gap-6">
                             {filteredItems.map((item, index) => (
-                                <div key={index} className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition">
+                                <div key={index} className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-lg transition">
                                     <div className="flex justify-between items-start mb-2">
-                                        <h3 className="text-xl font-bold text-gray-800 flex-1">{item.name}</h3>
+                                        <h3 className="text-xl font-bold text-gray-800 dark:text-white flex-1">{item.name}</h3>
                                         <span className="text-xl font-bold text-red-600 ml-4">{item.price}</span>
                                     </div>
 
                                     {/* Dotted Line */}
-                                    <div className="border-b border-dotted border-gray-300 my-2"></div>
+                                    <div className="border-b border-dotted border-gray-300 dark:border-gray-600 my-2"></div>
 
-                                    <p className="text-gray-600">{item.description}</p>
+                                    <p className="text-gray-600 dark:text-gray-400">{item.description}</p>
                                 </div>
                             ))}
                         </div>
@@ -109,7 +109,7 @@ export default function MenuPage() {
                         {/* No Results */}
                         {filteredItems.length === 0 && (
                             <div className="text-center py-12">
-                                <p className="text-gray-500 text-xl">No items found in this category.</p>
+                                <p className="text-gray-500 dark:text-gray-400 text-xl">No items found in this category.</p>
                             </div>
                         )}
 

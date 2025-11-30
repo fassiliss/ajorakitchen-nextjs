@@ -63,7 +63,6 @@ export default function AdminPage() {
 
     const fetchData = async () => {
         try {
-            // Fetch reservations
             const { data: reservationsData, error: reservationsError } = await supabase
                 .from('reservations')
                 .select('*')
@@ -72,7 +71,6 @@ export default function AdminPage() {
             if (reservationsError) throw reservationsError;
             setReservations(reservationsData || []);
 
-            // Fetch contact messages
             const { data: messagesData, error: messagesError } = await supabase
                 .from('contact_messages')
                 .select('*')
@@ -81,7 +79,6 @@ export default function AdminPage() {
             if (messagesError) throw messagesError;
             setMessages(messagesData || []);
 
-            // Fetch orders
             const { data: ordersData, error: ordersError } = await supabase
                 .from('orders')
                 .select('*')
@@ -90,7 +87,6 @@ export default function AdminPage() {
             if (ordersError) throw ordersError;
             setOrders(ordersData || []);
 
-            // Fetch catering requests
             const { data: cateringData, error: cateringError } = await supabase
                 .from('catering_requests')
                 .select('*')
@@ -105,10 +101,8 @@ export default function AdminPage() {
         }
     };
 
-    // Delete functions
     const deleteReservation = async (id: number) => {
         if (!confirm('Are you sure you want to delete this reservation?')) return;
-
         try {
             const { error } = await supabase.from('reservations').delete().eq('id', id);
             if (error) throw error;
@@ -121,7 +115,6 @@ export default function AdminPage() {
 
     const deleteMessage = async (id: number) => {
         if (!confirm('Are you sure you want to delete this message?')) return;
-
         try {
             const { error } = await supabase.from('contact_messages').delete().eq('id', id);
             if (error) throw error;
@@ -134,7 +127,6 @@ export default function AdminPage() {
 
     const deleteOrder = async (id: number) => {
         if (!confirm('Are you sure you want to delete this order?')) return;
-
         try {
             const { error } = await supabase.from('orders').delete().eq('id', id);
             if (error) throw error;
@@ -147,7 +139,6 @@ export default function AdminPage() {
 
     const deleteCateringRequest = async (id: number) => {
         if (!confirm('Are you sure you want to delete this catering request?')) return;
-
         try {
             const { error } = await supabase.from('catering_requests').delete().eq('id', id);
             if (error) throw error;
@@ -158,7 +149,6 @@ export default function AdminPage() {
         }
     };
 
-    // Update order status
     const updateOrderStatus = async (id: number, newStatus: string) => {
         try {
             const { error } = await supabase
@@ -181,7 +171,7 @@ export default function AdminPage() {
         <>
             <Header />
 
-            <div className="pt-20 min-h-screen bg-gray-50">
+            <div className="pt-20 min-h-screen bg-gray-50 dark:bg-gray-900">
                 {/* Hero */}
                 <section className="bg-red-600 text-white py-12">
                     <div className="container mx-auto px-4">
@@ -209,41 +199,41 @@ export default function AdminPage() {
 
                         {/* Stats Cards */}
                         <div className="grid md:grid-cols-4 gap-6 mb-8">
-                            <div className="bg-white rounded-lg shadow-lg p-6">
+                            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
                                 <div className="flex items-center">
                                     <div className="text-4xl mr-4">📅</div>
                                     <div>
-                                        <p className="text-gray-600 text-sm">Reservations</p>
+                                        <p className="text-gray-600 dark:text-gray-400 text-sm">Reservations</p>
                                         <p className="text-3xl font-bold text-red-600">{reservations.length}</p>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="bg-white rounded-lg shadow-lg p-6">
+                            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
                                 <div className="flex items-center">
                                     <div className="text-4xl mr-4">🛒</div>
                                     <div>
-                                        <p className="text-gray-600 text-sm">Orders</p>
+                                        <p className="text-gray-600 dark:text-gray-400 text-sm">Orders</p>
                                         <p className="text-3xl font-bold text-red-600">{orders.length}</p>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="bg-white rounded-lg shadow-lg p-6">
+                            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
                                 <div className="flex items-center">
                                     <div className="text-4xl mr-4">🎉</div>
                                     <div>
-                                        <p className="text-gray-600 text-sm">Catering</p>
+                                        <p className="text-gray-600 dark:text-gray-400 text-sm">Catering</p>
                                         <p className="text-3xl font-bold text-red-600">{cateringRequests.length}</p>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="bg-white rounded-lg shadow-lg p-6">
+                            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
                                 <div className="flex items-center">
                                     <div className="text-4xl mr-4">✉️</div>
                                     <div>
-                                        <p className="text-gray-600 text-sm">Messages</p>
+                                        <p className="text-gray-600 dark:text-gray-400 text-sm">Messages</p>
                                         <p className="text-3xl font-bold text-red-600">{messages.length}</p>
                                     </div>
                                 </div>
@@ -251,14 +241,14 @@ export default function AdminPage() {
                         </div>
 
                         {/* Tabs */}
-                        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-                            <div className="flex flex-wrap border-b">
+                        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+                            <div className="flex flex-wrap border-b dark:border-gray-700">
                                 <button
                                     onClick={() => setActiveTab('orders')}
                                     className={`flex-1 py-4 px-6 font-semibold transition ${
                                         activeTab === 'orders'
                                             ? 'bg-red-600 text-white'
-                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                            : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600'
                                     }`}
                                 >
                                     🛒 Orders ({orders.length})
@@ -268,7 +258,7 @@ export default function AdminPage() {
                                     className={`flex-1 py-4 px-6 font-semibold transition ${
                                         activeTab === 'reservations'
                                             ? 'bg-red-600 text-white'
-                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                            : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600'
                                     }`}
                                 >
                                     📅 Reservations ({reservations.length})
@@ -278,7 +268,7 @@ export default function AdminPage() {
                                     className={`flex-1 py-4 px-6 font-semibold transition ${
                                         activeTab === 'catering'
                                             ? 'bg-red-600 text-white'
-                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                            : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600'
                                     }`}
                                 >
                                     🎉 Catering ({cateringRequests.length})
@@ -288,7 +278,7 @@ export default function AdminPage() {
                                     className={`flex-1 py-4 px-6 font-semibold transition ${
                                         activeTab === 'messages'
                                             ? 'bg-red-600 text-white'
-                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                            : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600'
                                     }`}
                                 >
                                     ✉️ Messages ({messages.length})
@@ -297,19 +287,19 @@ export default function AdminPage() {
 
                             <div className="p-6">
                                 {loading ? (
-                                    <p className="text-center text-gray-600 py-12">Loading...</p>
+                                    <p className="text-center text-gray-600 dark:text-gray-400 py-12">Loading...</p>
                                 ) : (
                                     <>
                                         {/* Orders Tab */}
                                         {activeTab === 'orders' && (
                                             <div className="space-y-4">
                                                 {orders.length === 0 ? (
-                                                    <p className="text-center text-gray-600 py-12">No orders yet</p>
+                                                    <p className="text-center text-gray-600 dark:text-gray-400 py-12">No orders yet</p>
                                                 ) : (
                                                     orders.map((order) => (
-                                                        <div key={order.id} className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition">
+                                                        <div key={order.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-6 hover:shadow-md transition">
                                                             <div className="flex justify-between items-start mb-4">
-                                                                <h3 className="text-xl font-bold text-gray-900">Order #{order.id}</h3>
+                                                                <h3 className="text-xl font-bold text-gray-900 dark:text-white">Order #{order.id}</h3>
                                                                 <button
                                                                     onClick={() => deleteOrder(order.id)}
                                                                     className="text-red-600 hover:text-red-700 font-semibold"
@@ -320,49 +310,49 @@ export default function AdminPage() {
 
                                                             <div className="grid md:grid-cols-2 gap-4 mb-4">
                                                                 <div>
-                                                                    <p className="text-sm text-gray-600">Customer</p>
-                                                                    <p className="font-semibold text-lg">{order.customer_name}</p>
+                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Customer</p>
+                                                                    <p className="font-semibold text-lg dark:text-white">{order.customer_name}</p>
                                                                 </div>
                                                                 <div>
-                                                                    <p className="text-sm text-gray-600">Email</p>
-                                                                    <p className="font-semibold">{order.customer_email}</p>
+                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Email</p>
+                                                                    <p className="font-semibold dark:text-white">{order.customer_email}</p>
                                                                 </div>
                                                                 <div>
-                                                                    <p className="text-sm text-gray-600">Phone</p>
-                                                                    <p className="font-semibold">{order.customer_phone}</p>
+                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Phone</p>
+                                                                    <p className="font-semibold dark:text-white">{order.customer_phone}</p>
                                                                 </div>
                                                                 <div>
-                                                                    <p className="text-sm text-gray-600">Total</p>
+                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Total</p>
                                                                     <p className="font-semibold text-xl text-red-600">${order.total_amount.toFixed(2)}</p>
                                                                 </div>
                                                                 <div className="md:col-span-2">
-                                                                    <p className="text-sm text-gray-600">Delivery Address</p>
-                                                                    <p className="font-semibold">{order.customer_address}</p>
+                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Delivery Address</p>
+                                                                    <p className="font-semibold dark:text-white">{order.customer_address}</p>
                                                                 </div>
                                                                 <div className="md:col-span-2">
-                                                                    <p className="text-sm text-gray-600 mb-2">Items</p>
-                                                                    <div className="bg-gray-50 p-4 rounded">
+                                                                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Items</p>
+                                                                    <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded">
                                                                         {order.items.map((item: any, index: number) => (
                                                                             <div key={index} className="flex justify-between mb-2">
-                                                                                <span>{item.quantity}x {item.name}</span>
-                                                                                <span className="font-semibold">${(item.price * item.quantity).toFixed(2)}</span>
+                                                                                <span className="dark:text-white">{item.quantity}x {item.name}</span>
+                                                                                <span className="font-semibold dark:text-white">${(item.price * item.quantity).toFixed(2)}</span>
                                                                             </div>
                                                                         ))}
                                                                     </div>
                                                                 </div>
                                                                 <div>
-                                                                    <p className="text-sm text-gray-600">Ordered</p>
-                                                                    <p className="font-semibold">{new Date(order.created_at).toLocaleString()}</p>
+                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Ordered</p>
+                                                                    <p className="font-semibold dark:text-white">{new Date(order.created_at).toLocaleString()}</p>
                                                                 </div>
                                                                 <div>
-                                                                    <p className="text-sm text-gray-600 mb-2">Status</p>
+                                                                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Status</p>
                                                                     <div className="flex gap-2">
                                                                         <button
                                                                             onClick={() => updateOrderStatus(order.id, 'pending')}
                                                                             className={`px-3 py-1 rounded-full text-sm font-semibold ${
                                                                                 order.status === 'pending'
                                                                                     ? 'bg-yellow-200 text-yellow-800'
-                                                                                    : 'bg-gray-200 text-gray-600 hover:bg-yellow-100'
+                                                                                    : 'bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300 hover:bg-yellow-100'
                                                                             }`}
                                                                         >
                                                                             Pending
@@ -372,7 +362,7 @@ export default function AdminPage() {
                                                                             className={`px-3 py-1 rounded-full text-sm font-semibold ${
                                                                                 order.status === 'completed'
                                                                                     ? 'bg-green-200 text-green-800'
-                                                                                    : 'bg-gray-200 text-gray-600 hover:bg-green-100'
+                                                                                    : 'bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300 hover:bg-green-100'
                                                                             }`}
                                                                         >
                                                                             Completed
@@ -382,7 +372,7 @@ export default function AdminPage() {
                                                                             className={`px-3 py-1 rounded-full text-sm font-semibold ${
                                                                                 order.status === 'cancelled'
                                                                                     ? 'bg-red-200 text-red-800'
-                                                                                    : 'bg-gray-200 text-gray-600 hover:bg-red-100'
+                                                                                    : 'bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300 hover:bg-red-100'
                                                                             }`}
                                                                         >
                                                                             Cancelled
@@ -400,12 +390,12 @@ export default function AdminPage() {
                                         {activeTab === 'reservations' && (
                                             <div className="space-y-4">
                                                 {reservations.length === 0 ? (
-                                                    <p className="text-center text-gray-600 py-12">No reservations yet</p>
+                                                    <p className="text-center text-gray-600 dark:text-gray-400 py-12">No reservations yet</p>
                                                 ) : (
                                                     reservations.map((reservation) => (
-                                                        <div key={reservation.id} className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition">
+                                                        <div key={reservation.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-6 hover:shadow-md transition">
                                                             <div className="flex justify-between items-start mb-4">
-                                                                <h3 className="text-xl font-bold text-gray-900">Reservation #{reservation.id}</h3>
+                                                                <h3 className="text-xl font-bold text-gray-900 dark:text-white">Reservation #{reservation.id}</h3>
                                                                 <button
                                                                     onClick={() => deleteReservation(reservation.id)}
                                                                     className="text-red-600 hover:text-red-700 font-semibold"
@@ -416,28 +406,28 @@ export default function AdminPage() {
 
                                                             <div className="grid md:grid-cols-2 gap-4">
                                                                 <div>
-                                                                    <p className="text-sm text-gray-600">Name</p>
-                                                                    <p className="font-semibold text-lg">{reservation.name}</p>
+                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Name</p>
+                                                                    <p className="font-semibold text-lg dark:text-white">{reservation.name}</p>
                                                                 </div>
                                                                 <div>
-                                                                    <p className="text-sm text-gray-600">Email</p>
-                                                                    <p className="font-semibold">{reservation.email}</p>
+                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Email</p>
+                                                                    <p className="font-semibold dark:text-white">{reservation.email}</p>
                                                                 </div>
                                                                 <div>
-                                                                    <p className="text-sm text-gray-600">Phone</p>
-                                                                    <p className="font-semibold">{reservation.phone}</p>
+                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Phone</p>
+                                                                    <p className="font-semibold dark:text-white">{reservation.phone}</p>
                                                                 </div>
                                                                 <div>
-                                                                    <p className="text-sm text-gray-600">Date & Time</p>
-                                                                    <p className="font-semibold">{reservation.date} at {reservation.time}</p>
+                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Date & Time</p>
+                                                                    <p className="font-semibold dark:text-white">{reservation.date} at {reservation.time}</p>
                                                                 </div>
                                                                 <div>
-                                                                    <p className="text-sm text-gray-600">Guests</p>
-                                                                    <p className="font-semibold">{reservation.guests} people</p>
+                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Guests</p>
+                                                                    <p className="font-semibold dark:text-white">{reservation.guests} people</p>
                                                                 </div>
                                                                 <div>
-                                                                    <p className="text-sm text-gray-600">Submitted</p>
-                                                                    <p className="font-semibold">{new Date(reservation.created_at).toLocaleString()}</p>
+                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Submitted</p>
+                                                                    <p className="font-semibold dark:text-white">{new Date(reservation.created_at).toLocaleString()}</p>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -450,12 +440,12 @@ export default function AdminPage() {
                                         {activeTab === 'catering' && (
                                             <div className="space-y-4">
                                                 {cateringRequests.length === 0 ? (
-                                                    <p className="text-center text-gray-600 py-12">No catering requests yet</p>
+                                                    <p className="text-center text-gray-600 dark:text-gray-400 py-12">No catering requests yet</p>
                                                 ) : (
                                                     cateringRequests.map((request) => (
-                                                        <div key={request.id} className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition">
+                                                        <div key={request.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-6 hover:shadow-md transition">
                                                             <div className="flex justify-between items-start mb-4">
-                                                                <h3 className="text-xl font-bold text-gray-900">Catering Request #{request.id}</h3>
+                                                                <h3 className="text-xl font-bold text-gray-900 dark:text-white">Catering Request #{request.id}</h3>
                                                                 <button
                                                                     onClick={() => deleteCateringRequest(request.id)}
                                                                     className="text-red-600 hover:text-red-700 font-semibold"
@@ -466,32 +456,32 @@ export default function AdminPage() {
 
                                                             <div className="grid md:grid-cols-2 gap-4">
                                                                 <div>
-                                                                    <p className="text-sm text-gray-600">Name</p>
-                                                                    <p className="font-semibold text-lg">{request.first_name} {request.last_name}</p>
+                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Name</p>
+                                                                    <p className="font-semibold text-lg dark:text-white">{request.first_name} {request.last_name}</p>
                                                                 </div>
                                                                 <div>
-                                                                    <p className="text-sm text-gray-600">Email</p>
-                                                                    <p className="font-semibold">{request.email}</p>
+                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Email</p>
+                                                                    <p className="font-semibold dark:text-white">{request.email}</p>
                                                                 </div>
                                                                 <div>
-                                                                    <p className="text-sm text-gray-600">Event Date</p>
-                                                                    <p className="font-semibold">{request.event_date || 'Not specified'}</p>
+                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Event Date</p>
+                                                                    <p className="font-semibold dark:text-white">{request.event_date || 'Not specified'}</p>
                                                                 </div>
                                                                 <div>
-                                                                    <p className="text-sm text-gray-600">Number of Guests</p>
-                                                                    <p className="font-semibold">{request.number_of_guests || 'Not specified'}</p>
+                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Number of Guests</p>
+                                                                    <p className="font-semibold dark:text-white">{request.number_of_guests || 'Not specified'}</p>
                                                                 </div>
                                                                 <div className="md:col-span-2">
-                                                                    <p className="text-sm text-gray-600">Location</p>
-                                                                    <p className="font-semibold">{request.location || 'Not specified'}</p>
+                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Location</p>
+                                                                    <p className="font-semibold dark:text-white">{request.location || 'Not specified'}</p>
                                                                 </div>
                                                                 <div className="md:col-span-2">
-                                                                    <p className="text-sm text-gray-600">Food Selections / Request</p>
-                                                                    <p className="mt-1 text-gray-700 bg-gray-50 p-4 rounded whitespace-pre-wrap">{request.food_selections}</p>
+                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Food Selections / Request</p>
+                                                                    <p className="mt-1 text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 p-4 rounded whitespace-pre-wrap">{request.food_selections}</p>
                                                                 </div>
                                                                 <div>
-                                                                    <p className="text-sm text-gray-600">Submitted</p>
-                                                                    <p className="font-semibold">{new Date(request.created_at).toLocaleString()}</p>
+                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Submitted</p>
+                                                                    <p className="font-semibold dark:text-white">{new Date(request.created_at).toLocaleString()}</p>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -504,12 +494,12 @@ export default function AdminPage() {
                                         {activeTab === 'messages' && (
                                             <div className="space-y-4">
                                                 {messages.length === 0 ? (
-                                                    <p className="text-center text-gray-600 py-12">No messages yet</p>
+                                                    <p className="text-center text-gray-600 dark:text-gray-400 py-12">No messages yet</p>
                                                 ) : (
                                                     messages.map((message) => (
-                                                        <div key={message.id} className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition">
+                                                        <div key={message.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-6 hover:shadow-md transition">
                                                             <div className="flex justify-between items-start mb-4">
-                                                                <h3 className="text-xl font-bold text-gray-900">Message #{message.id}</h3>
+                                                                <h3 className="text-xl font-bold text-gray-900 dark:text-white">Message #{message.id}</h3>
                                                                 <button
                                                                     onClick={() => deleteMessage(message.id)}
                                                                     className="text-red-600 hover:text-red-700 font-semibold"
@@ -520,24 +510,24 @@ export default function AdminPage() {
 
                                                             <div className="grid md:grid-cols-2 gap-4 mb-4">
                                                                 <div>
-                                                                    <p className="text-sm text-gray-600">Name</p>
-                                                                    <p className="font-semibold text-lg">{message.name}</p>
+                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Name</p>
+                                                                    <p className="font-semibold text-lg dark:text-white">{message.name}</p>
                                                                 </div>
                                                                 <div>
-                                                                    <p className="text-sm text-gray-600">Email</p>
-                                                                    <p className="font-semibold">{message.email}</p>
+                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Email</p>
+                                                                    <p className="font-semibold dark:text-white">{message.email}</p>
                                                                 </div>
                                                                 <div className="md:col-span-2">
-                                                                    <p className="text-sm text-gray-600">Subject</p>
-                                                                    <p className="font-semibold">{message.subject}</p>
+                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Subject</p>
+                                                                    <p className="font-semibold dark:text-white">{message.subject}</p>
                                                                 </div>
                                                                 <div className="md:col-span-2">
-                                                                    <p className="text-sm text-gray-600">Message</p>
-                                                                    <p className="mt-1 text-gray-700 bg-gray-50 p-4 rounded">{message.message}</p>
+                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Message</p>
+                                                                    <p className="mt-1 text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 p-4 rounded">{message.message}</p>
                                                                 </div>
                                                                 <div>
-                                                                    <p className="text-sm text-gray-600">Received</p>
-                                                                    <p className="font-semibold">{new Date(message.created_at).toLocaleString()}</p>
+                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Received</p>
+                                                                    <p className="font-semibold dark:text-white">{new Date(message.created_at).toLocaleString()}</p>
                                                                 </div>
                                                             </div>
                                                         </div>

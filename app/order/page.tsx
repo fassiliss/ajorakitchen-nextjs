@@ -128,7 +128,7 @@ export default function OrderPage() {
         <>
             <Header />
 
-            <div className="pt-20 min-h-screen bg-gray-50">
+            <div className="pt-20 min-h-screen bg-gray-50 dark:bg-gray-900">
                 {/* Hero */}
                 <section className="relative py-20 bg-red-600 text-white">
                     <div className="container mx-auto px-4 text-center">
@@ -140,7 +140,7 @@ export default function OrderPage() {
                 {/* Success Message */}
                 {orderSuccess && (
                     <div className="container mx-auto px-4 mt-8">
-                        <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded max-w-4xl mx-auto">
+                        <div className="bg-green-100 dark:bg-green-900 border-l-4 border-green-500 text-green-700 dark:text-green-300 p-4 rounded max-w-4xl mx-auto">
                             <p className="font-bold">✅ Order placed successfully!</p>
                             <p>We'll contact you shortly to confirm your order.</p>
                         </div>
@@ -163,13 +163,13 @@ export default function OrderPage() {
 
                             return (
                                 <div key={category} className="mb-12">
-                                    <h2 className="text-3xl font-bold mb-6 text-gray-800">{category}</h2>
+                                    <h2 className="text-3xl font-bold mb-6 text-gray-800 dark:text-white">{category}</h2>
                                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                                         {categoryItems.map(item => (
-                                            <div key={item.id} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
+                                            <div key={item.id} className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
                                                 <div className="p-6">
-                                                    <h3 className="text-xl font-bold mb-2">{item.name}</h3>
-                                                    <p className="text-gray-600 mb-4 text-sm">{item.description}</p>
+                                                    <h3 className="text-xl font-bold mb-2 dark:text-white">{item.name}</h3>
+                                                    <p className="text-gray-600 dark:text-gray-400 mb-4 text-sm">{item.description}</p>
                                                     <div className="flex justify-between items-center">
                                                         <span className="text-2xl font-bold text-red-600">${item.price}</span>
                                                         <button
@@ -189,38 +189,35 @@ export default function OrderPage() {
                     </div>
                 </section>
 
-
                 {/* Cart Sidebar */}
                 {showCart && (
                     <>
-                        {/* Dark Overlay */}
                         <div
                             className="fixed inset-0 bg-black bg-opacity-70 z-40"
                             onClick={() => setShowCart(false)}
                         ></div>
 
-                        {/* Sidebar */}
-                        <div className="fixed right-0 top-0 h-full w-full md:w-96 bg-white shadow-2xl overflow-y-auto z-50">
+                        <div className="fixed right-0 top-0 h-full w-full md:w-96 bg-white dark:bg-gray-800 shadow-2xl overflow-y-auto z-50">
                             <div className="p-6">
                                 <div className="flex justify-between items-center mb-6">
-                                    <h2 className="text-2xl font-bold text-gray-900">Your Cart</h2>
+                                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Your Cart</h2>
                                     <button
                                         onClick={() => setShowCart(false)}
-                                        className="text-3xl text-gray-700 hover:text-red-600"
+                                        className="text-3xl text-gray-700 dark:text-gray-300 hover:text-red-600"
                                     >
                                         ✕
                                     </button>
                                 </div>
 
                                 {cart.length === 0 ? (
-                                    <p className="text-gray-600 text-center py-12">Your cart is empty</p>
+                                    <p className="text-gray-600 dark:text-gray-400 text-center py-12">Your cart is empty</p>
                                 ) : (
                                     <>
                                         <div className="space-y-4 mb-6">
                                             {cart.map(item => (
-                                                <div key={item.id} className="border-b border-gray-300 pb-4">
+                                                <div key={item.id} className="border-b border-gray-300 dark:border-gray-600 pb-4">
                                                     <div className="flex justify-between mb-2">
-                                                        <span className="font-semibold text-gray-900">{item.name}</span>
+                                                        <span className="font-semibold text-gray-900 dark:text-white">{item.name}</span>
                                                         <button
                                                             onClick={() => removeFromCart(item.id)}
                                                             className="text-red-600 hover:text-red-700 text-xl"
@@ -232,27 +229,27 @@ export default function OrderPage() {
                                                         <div className="flex items-center gap-3">
                                                             <button
                                                                 onClick={() => updateQuantity(item.id, -1)}
-                                                                className="bg-gray-200 px-3 py-1 rounded hover:bg-gray-300 font-bold text-gray-900"
+                                                                className="bg-gray-200 dark:bg-gray-700 px-3 py-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600 font-bold text-gray-900 dark:text-white"
                                                             >
                                                                 -
                                                             </button>
-                                                            <span className="font-semibold text-gray-900 min-w-[30px] text-center">{item.quantity}</span>
+                                                            <span className="font-semibold text-gray-900 dark:text-white min-w-[30px] text-center">{item.quantity}</span>
                                                             <button
                                                                 onClick={() => updateQuantity(item.id, 1)}
-                                                                className="bg-gray-200 px-3 py-1 rounded hover:bg-gray-300 font-bold text-gray-900"
+                                                                className="bg-gray-200 dark:bg-gray-700 px-3 py-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600 font-bold text-gray-900 dark:text-white"
                                                             >
                                                                 +
                                                             </button>
                                                         </div>
-                                                        <span className="font-semibold text-gray-900">${(item.price * item.quantity).toFixed(2)}</span>
+                                                        <span className="font-semibold text-gray-900 dark:text-white">${(item.price * item.quantity).toFixed(2)}</span>
                                                     </div>
                                                 </div>
                                             ))}
                                         </div>
 
-                                        <div className="border-t border-gray-300 pt-4 mb-6">
+                                        <div className="border-t border-gray-300 dark:border-gray-600 pt-4 mb-6">
                                             <div className="flex justify-between text-xl font-bold">
-                                                <span className="text-gray-900">Total:</span>
+                                                <span className="text-gray-900 dark:text-white">Total:</span>
                                                 <span className="text-red-600">${getTotal()}</span>
                                             </div>
                                         </div>
@@ -275,66 +272,66 @@ export default function OrderPage() {
 
                 {/* Checkout Modal */}
                 {showCheckout && (
-                    <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex justify-end" onClick={() => setShowCart(false)}>
+                    <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex justify-end" onClick={() => setShowCheckout(false)}>
                         <div
-                            className="w-full md:w-96 bg-white shadow-2xl overflow-y-auto h-full"
+                            className="w-full md:w-96 bg-white dark:bg-gray-800 shadow-2xl overflow-y-auto h-full"
                             onClick={(e) => e.stopPropagation()}
                         >
                             <div className="p-6">
                                 <div className="flex justify-between items-center mb-6">
-                                    <h2 className="text-2xl font-bold">Checkout</h2>
-                                    <button onClick={() => setShowCheckout(false)} className="text-2xl">✕</button>
+                                    <h2 className="text-2xl font-bold dark:text-white">Checkout</h2>
+                                    <button onClick={() => setShowCheckout(false)} className="text-2xl dark:text-white">✕</button>
                                 </div>
 
                                 <form onSubmit={handleCheckout} className="space-y-4">
                                     <div>
-                                        <label className="block text-gray-700 font-semibold mb-2">Full Name *</label>
+                                        <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Full Name *</label>
                                         <input
                                             type="text"
                                             value={customerInfo.name}
                                             onChange={(e) => setCustomerInfo({...customerInfo, name: e.target.value})}
                                             required
-                                            className="w-full px-4 py-3 border-2 border-gray-400 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent text-black font-bold bg-white placeholder-gray-400"
+                                            className="w-full px-4 py-3 border-2 border-gray-400 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent text-black dark:text-white font-bold bg-white dark:bg-gray-700 placeholder-gray-400"
                                         />
                                     </div>
 
                                     <div>
-                                        <label className="block text-gray-700 font-semibold mb-2">Email *</label>
+                                        <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Email *</label>
                                         <input
                                             type="email"
                                             value={customerInfo.email}
                                             onChange={(e) => setCustomerInfo({...customerInfo, email: e.target.value})}
                                             required
-                                            className="w-full px-4 py-3 border-2 border-gray-400 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent text-black font-bold bg-white placeholder-gray-400"
+                                            className="w-full px-4 py-3 border-2 border-gray-400 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent text-black dark:text-white font-bold bg-white dark:bg-gray-700 placeholder-gray-400"
                                         />
                                     </div>
 
                                     <div>
-                                        <label className="block text-gray-700 font-semibold mb-2">Phone *</label>
+                                        <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Phone *</label>
                                         <input
                                             type="tel"
                                             value={customerInfo.phone}
                                             onChange={(e) => setCustomerInfo({...customerInfo, phone: e.target.value})}
                                             required
-                                            className="w-full px-4 py-3 border-2 border-gray-400 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent text-black font-bold bg-white placeholder-gray-400"
+                                            className="w-full px-4 py-3 border-2 border-gray-400 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent text-black dark:text-white font-bold bg-white dark:bg-gray-700 placeholder-gray-400"
                                         />
                                     </div>
 
                                     <div>
-                                        <label className="block text-gray-700 font-semibold mb-2">Delivery Address *</label>
+                                        <label className="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Delivery Address *</label>
                                         <textarea
                                             value={customerInfo.address}
                                             onChange={(e) => setCustomerInfo({...customerInfo, address: e.target.value})}
                                             required
                                             rows={3}
-                                            className="w-full px-4 py-3 border-2 border-gray-400 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent text-black font-bold bg-white resize-none placeholder-gray-400"
+                                            className="w-full px-4 py-3 border-2 border-gray-400 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent text-black dark:text-white font-bold bg-white dark:bg-gray-700 resize-none placeholder-gray-400"
                                         />
                                     </div>
 
-                                    <div className="border-t pt-4">
-                                        <div className="flex justify-between text-2xl font-bold mb-4 bg-gray-100 p-4 rounded-lg">
-                                            <span className="text-black">Total:</span>
-                                            <span className="text-red-700 text-3xl">${getTotal()}</span>
+                                    <div className="border-t dark:border-gray-600 pt-4">
+                                        <div className="flex justify-between text-2xl font-bold mb-4 bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+                                            <span className="text-black dark:text-white">Total:</span>
+                                            <span className="text-red-700 dark:text-red-500 text-3xl">${getTotal()}</span>
                                         </div>
                                         <button
                                             type="submit"

@@ -62,21 +62,21 @@ export default function Home() {
 </section>
 
     {/* About Section */}
-    <section id="about" className="py-20 bg-white">
+            <section id="about" className="py-20 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
-                <h2 className="text-5xl font-bold mb-4">Welcome to Ajorakitchen</h2>
-                <p className="text-gray-600 text-lg mb-8">
+                <h2 className="text-5xl font-bold mb-4 dark:text-white">Welcome to Ajorakitchen</h2>
+                <p className="text-gray-600 dark:text-gray-400 text-lg mb-8">
                     Experience the finest culinary delights prepared with love and passion
                 </p>
                 <div className="grid md:grid-cols-2 gap-8 text-left">
                     <div>
-                        <p className="text-gray-700 leading-relaxed mb-4">
+                        <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
                             At Ajorakitchen, we believe that great food brings people together.
                             Our chefs use only the freshest ingredients to create dishes that
                             delight your taste buds and warm your heart.
                         </p>
-                        <p className="text-gray-700 leading-relaxed">
+                        <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                             From traditional recipes passed down through generations to modern
                             culinary innovations, every dish tells a story of passion,
                             creativity, and excellence.
@@ -95,24 +95,24 @@ export default function Home() {
     </section>
 
     {/* Menu Preview */}
-    <section id="menu" className="py-20 bg-gray-50">
+            <section id="menu" className="py-20 bg-gray-50 dark:bg-gray-800">
         <div className="container mx-auto px-4">
             <div className="text-center mb-12">
-                <h2 className="text-5xl font-bold mb-4">Our Menu</h2>
-                <p className="text-gray-600 text-lg">Explore our delicious offerings</p>
+                <h2 className="text-5xl font-bold mb-4 dark:text-white">Our Menu</h2>
+                <p className="text-gray-600 dark:text-gray-400 text-lg">Explore our delicious offerings</p>
             </div>
 
             <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
                 {/* Menu Item 1 */}
-                <div className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition">
+                <div className="bg-white dark:bg-gray-700 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition">
                     <img
                         src="/images/ajora-3.png"
                         alt="Special Dish"
                         className="h-48 w-full object-cover"
                     />
                     <div className="p-6">
-                        <h3 className="text-2xl font-bold mb-2">Special Dish</h3>
-                        <p className="text-gray-600 mb-4">Delicious and flavorful, made with love</p>
+                        <h3 className="text-2xl font-bold mb-2 dark:text-white">Special Dish</h3>
+                        <p className="text-gray-600 dark:text-gray-400 mb-4">Delicious and flavorful, made with love</p>
                         <div className="flex justify-between items-center">
                             <span className="text-2xl font-bold text-red-600">$24.99</span>
                             <a
@@ -126,15 +126,16 @@ export default function Home() {
                 </div>
 
                 {/* Menu Item 2 */}
-                <div className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition">
+                {/* Menu Item 2 */}
+                <div className="bg-white dark:bg-gray-700 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition">
                     <img
                         src="/images/ajora-4.png"
                         alt="Special Dish"
                         className="h-48 w-full object-cover"
                     />
                     <div className="p-6">
-                        <h3 className="text-2xl font-bold mb-2">Chef's Choice</h3>
-                        <p className="text-gray-600 mb-4">Our chef's recommended specialty</p>
+                        <h3 className="text-2xl font-bold mb-2 dark:text-white">Chef's Choice</h3>
+                        <p className="text-gray-600 dark:text-gray-400 mb-4">Our chef's recommended specialty</p>
                         <div className="flex justify-between items-center">
                             <span className="text-2xl font-bold text-red-600">$29.99</span>
                             <a
@@ -148,15 +149,16 @@ export default function Home() {
                 </div>
 
                 {/* Menu Item 3 */}
-                <div className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition">
+                {/* Menu Item 2 */}
+                <div className="bg-white dark:bg-gray-700 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition">
                     <img
                         src="/images/ajora-5.png"
                         alt="Special Dish"
                         className="h-48 w-full object-cover"
                     />
                     <div className="p-6">
-                        <h3 className="text-2xl font-bold mb-2">House Special</h3>
-                        <p className="text-gray-600 mb-4">A customer favorite for years</p>
+                        <h3 className="text-2xl font-bold mb-2 dark:text-white">House Special</h3>
+                        <p className="text-gray-600 dark:text-gray-400 mb-4">A customer favorite for years</p>
                         <div className="flex justify-between items-center">
                             <span className="text-2xl font-bold text-red-600">$19.99</span>
                             <a

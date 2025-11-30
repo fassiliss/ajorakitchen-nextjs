@@ -29,21 +29,18 @@ export default function ReservationPage() {
         setError('');
 
         try {
-            // Save to Supabase
             const { data, error } = await supabase
                 .from('reservations')
                 .insert([formData]);
 
             if (error) throw error;
 
-            // Send email notification
             await fetch('/api/send-reservation-email', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
             });
 
-            // Success!
             setSuccess(true);
             setFormData({
                 name: '',
@@ -54,7 +51,6 @@ export default function ReservationPage() {
                 guests: '',
             });
 
-            // Hide success message after 5 seconds
             setTimeout(() => setSuccess(false), 5000);
         } catch (err: any) {
             setError(err.message || 'Something went wrong. Please try again.');
@@ -86,27 +82,27 @@ export default function ReservationPage() {
                 </section>
 
                 {/* Reservation Form */}
-                <section className="py-20 bg-gray-50">
+                <section className="py-20 bg-gray-50 dark:bg-gray-900">
                     <div className="container mx-auto px-4 max-w-5xl">
                         {success && (
-                            <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-8 rounded">
+                            <div className="bg-green-100 dark:bg-green-900 border-l-4 border-green-500 text-green-700 dark:text-green-300 p-4 mb-8 rounded">
                                 <p className="font-bold">✅ Reservation request received!</p>
                                 <p>We'll contact you shortly to confirm your reservation.</p>
                             </div>
                         )}
 
                         {error && (
-                            <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-8 rounded">
+                            <div className="bg-red-100 dark:bg-red-900 border-l-4 border-red-500 text-red-700 dark:text-red-300 p-4 mb-8 rounded">
                                 <p className="font-bold">❌ Error</p>
                                 <p>{error}</p>
                             </div>
                         )}
 
-                        <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-lg p-8">
+                        <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
                             <div className="grid md:grid-cols-3 gap-6">
                                 {/* Date */}
                                 <div className="relative">
-                                    <label htmlFor="date" className="block text-gray-900 font-semibold mb-2">
+                                    <label htmlFor="date" className="block text-gray-900 dark:text-white font-semibold mb-2">
                                         Date
                                     </label>
                                     <div className="relative">
@@ -118,7 +114,7 @@ export default function ReservationPage() {
                                             onChange={handleChange}
                                             min={new Date().toISOString().split('T')[0]}
                                             required
-                                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent text-gray-900 font-medium"
+                                            className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent text-gray-900 dark:text-white font-medium bg-white dark:bg-gray-700"
                                             placeholder="Pick a date"
                                         />
                                         <span className="absolute left-3 top-3.5 text-gray-400">📅</span>
@@ -127,7 +123,7 @@ export default function ReservationPage() {
 
                                 {/* Name */}
                                 <div className="relative">
-                                    <label htmlFor="name" className="block text-gray-900 font-bold mb-2">
+                                    <label htmlFor="name" className="block text-gray-900 dark:text-white font-bold mb-2">
                                         Your Name
                                     </label>
                                     <div className="relative">
@@ -138,7 +134,7 @@ export default function ReservationPage() {
                                             value={formData.name}
                                             onChange={handleChange}
                                             required
-                                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent text-gray-900 font-medium"
+                                            className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent text-gray-900 dark:text-white font-medium bg-white dark:bg-gray-700"
                                             placeholder="Full Name"
                                         />
                                         <span className="absolute left-3 top-3.5 text-gray-400">✏️</span>
@@ -147,7 +143,7 @@ export default function ReservationPage() {
 
                                 {/* Time */}
                                 <div className="relative">
-                                    <label htmlFor="time" className="block text-gray-900 font-bold mb-2">
+                                    <label htmlFor="time" className="block text-gray-900 dark:text-white font-bold mb-2">
                                         Time
                                     </label>
                                     <div className="relative">
@@ -157,7 +153,7 @@ export default function ReservationPage() {
                                             value={formData.time}
                                             onChange={handleChange}
                                             required
-                                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent text-gray-900 font-medium"
+                                            className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent text-gray-900 dark:text-white font-medium bg-white dark:bg-gray-700"
                                         >
                                             <option value="">Pick a time</option>
                                             <option value="9:00 AM">9:00 AM</option>
@@ -186,7 +182,7 @@ export default function ReservationPage() {
 
                                 {/* Email */}
                                 <div className="relative">
-                                    <label htmlFor="email" className="block text-gray-900 font-bold mb-2">
+                                    <label htmlFor="email" className="block text-gray-900 dark:text-white font-bold mb-2">
                                         Email Address
                                     </label>
                                     <div className="relative">
@@ -197,7 +193,7 @@ export default function ReservationPage() {
                                             value={formData.email}
                                             onChange={handleChange}
                                             required
-                                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent text-gray-900 font-medium"
+                                            className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent text-gray-900 dark:text-white font-medium bg-white dark:bg-gray-700"
                                             placeholder="Your Email ID"
                                         />
                                         <span className="absolute left-3 top-3.5 text-gray-400">✉️</span>
@@ -206,7 +202,7 @@ export default function ReservationPage() {
 
                                 {/* Guests */}
                                 <div className="relative">
-                                    <label htmlFor="guests" className="block text-gray-900 font-bold mb-2">
+                                    <label htmlFor="guests" className="block text-gray-900 dark:text-white font-bold mb-2">
                                         Guests
                                     </label>
                                     <div className="relative">
@@ -219,7 +215,7 @@ export default function ReservationPage() {
                                             min="1"
                                             max="20"
                                             required
-                                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent text-gray-900 font-medium"
+                                            className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent text-gray-900 dark:text-white font-medium bg-white dark:bg-gray-700"
                                             placeholder="How many of you?"
                                         />
                                         <span className="absolute left-3 top-3.5 text-gray-400">👥</span>
@@ -228,7 +224,7 @@ export default function ReservationPage() {
 
                                 {/* Phone */}
                                 <div className="relative">
-                                    <label htmlFor="phone" className="block text-gray-900 font-bold mb-2">
+                                    <label htmlFor="phone" className="block text-gray-900 dark:text-white font-bold mb-2">
                                         Phone Number
                                     </label>
                                     <div className="relative">
@@ -239,7 +235,7 @@ export default function ReservationPage() {
                                             value={formData.phone}
                                             onChange={handleChange}
                                             required
-                                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent text-gray-900 font-medium"
+                                            className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent text-gray-900 dark:text-white font-medium bg-white dark:bg-gray-700"
                                             placeholder="Enter your Phone Number"
                                         />
                                         <span className="absolute left-3 top-3.5 text-gray-400">📞</span>
@@ -261,7 +257,7 @@ export default function ReservationPage() {
 
                         {/* Footer Note */}
                         <div className="text-center mt-8">
-                            <p className="text-gray-600">
+                            <p className="text-gray-600 dark:text-gray-400">
                                 You can also call: <strong className="text-red-600">(615) 801-0203</strong> to make a reservation.
                             </p>
                         </div>
