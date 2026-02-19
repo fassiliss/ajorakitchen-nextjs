@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { supabase } from '@/lib/supabase';
+
+
 
 interface Reservation {
     id: number;
@@ -62,110 +63,137 @@ export default function AdminPage() {
     }, []);
 
     const fetchData = async () => {
-        try {
-            const { data: reservationsData, error: reservationsError } = await supabase
-                .from('reservations')
-                .select('*')
-                .order('created_at', { ascending: false });
+      try {
+        const [rRes, mRes, oRes, cRes] = await Promise.all([
+          fetch("/api/admin/reservations", { cache: "no-store" }),
+          fetch("/api/admin/messages", { cache: "no-store" }),
+          fetch("/api/admin/orders", { cache: "no-store" }),
+          fetch("/api/admin/catering", { cache: "no-store" }),
+        ]);
 
-            if (reservationsError) throw reservationsError;
-            setReservations(reservationsData || []);
+        const rJson = await rRes.json();
+        const mJson = await mRes.json();
+        const oJson = await oRes.json();
+        const cJson = await cRes.json();
 
-            const { data: messagesData, error: messagesError } = await supabase
-                .from('contact_messages')
-                .select('*')
-                .order('created_at', { ascending: false });
+        if (!rRes.ok)
+          throw new Error(rJson.error || "Failed to load reservations");
+        if (!mRes.ok) throw new Error(mJson.error || "Failed to load messages");
+        if (!oRes.ok) throw new Error(oJson.error || "Failed to load orders");
+        if (!cRes.ok) throw new Error(cJson.error || "Failed to load catering");
 
-            if (messagesError) throw messagesError;
-            setMessages(messagesData || []);
-
-            const { data: ordersData, error: ordersError } = await supabase
-                .from('orders')
-                .select('*')
-                .order('created_at', { ascending: false });
-
-            if (ordersError) throw ordersError;
-            setOrders(ordersData || []);
-
-            const { data: cateringData, error: cateringError } = await supabase
-                .from('catering_requests')
-                .select('*')
-                .order('created_at', { ascending: false });
-
-            if (cateringError) throw cateringError;
-            setCateringRequests(cateringData || []);
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        } finally {
-            setLoading(false);
-        }
+        setReservations(rJson.reservations || []);
+        setMessages(mJson.messages || []);
+        setOrders(oJson.orders || []);
+        setCateringRequests(cJson.cateringRequests || []);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
     };
+
 
     const deleteReservation = async (id: number) => {
-        if (!confirm('Are you sure you want to delete this reservation?')) return;
-        try {
-            const { error } = await supabase.from('reservations').delete().eq('id', id);
-            if (error) throw error;
-            setReservations(reservations.filter(r => r.id !== id));
-        } catch (error) {
-            console.error('Error deleting reservation:', error);
-            alert('Failed to delete reservation');
-        }
+      if (!confirm("Are you sure you want to delete this reservation?")) return;
+      try {
+        const res = await fetch("/api/admin/reservations", {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id }),
+        });
+        const json = await res.json();
+        if (!res.ok) throw new Error(json.error || "Delete failed");
+        setReservations((prev) => prev.filter((r) => r.id !== id));
+      } catch (error) {
+        console.error("Error deleting reservation:", error);
+        alert("Failed to delete reservation");
+      }
     };
+
 
     const deleteMessage = async (id: number) => {
-        if (!confirm('Are you sure you want to delete this message?')) return;
-        try {
-            const { error } = await supabase.from('contact_messages').delete().eq('id', id);
-            if (error) throw error;
-            setMessages(messages.filter(m => m.id !== id));
-        } catch (error) {
-            console.error('Error deleting message:', error);
-            alert('Failed to delete message');
-        }
+      if (!confirm("Are you sure you want to delete this message?")) return;
+
+      try {
+        const res = await fetch("/api/admin/messages", {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id }),
+        });
+        const json = await res.json();
+        if (!res.ok) throw new Error(json.error || "Delete failed");
+
+        setMessages((prev) => prev.filter((m) => m.id !== id));
+      } catch (error) {
+        console.error("Error deleting message:", error);
+        alert("Failed to delete message");
+      }
     };
 
-    const deleteOrder = async (id: number) => {
-        if (!confirm('Are you sure you want to delete this order?')) return;
-        try {
-            const { error } = await supabase.from('orders').delete().eq('id', id);
-            if (error) throw error;
-            setOrders(orders.filter(o => o.id !== id));
-        } catch (error) {
-            console.error('Error deleting order:', error);
-            alert('Failed to delete order');
-        }
-    };
 
-    const deleteCateringRequest = async (id: number) => {
-        if (!confirm('Are you sure you want to delete this catering request?')) return;
-        try {
-            const { error } = await supabase.from('catering_requests').delete().eq('id', id);
-            if (error) throw error;
-            setCateringRequests(cateringRequests.filter(c => c.id !== id));
-        } catch (error) {
-            console.error('Error deleting catering request:', error);
-            alert('Failed to delete catering request');
-        }
-    };
+   const deleteOrder = async (id: number) => {
+     if (!confirm("Are you sure you want to delete this order?")) return;
+
+     try {
+       const res = await fetch("/api/admin/orders", {
+         method: "DELETE",
+         headers: { "Content-Type": "application/json" },
+         body: JSON.stringify({ id }),
+       });
+       const json = await res.json();
+       if (!res.ok) throw new Error(json.error || "Delete failed");
+
+       setOrders((prev) => prev.filter((o) => o.id !== id));
+     } catch (error) {
+       console.error("Error deleting order:", error);
+       alert("Failed to delete order");
+     }
+   };
+
+
+ const deleteCateringRequest = async (id: number) => {
+   if (!confirm("Are you sure you want to delete this catering request?"))
+     return;
+
+   try {
+     const res = await fetch("/api/admin/catering", {
+       method: "DELETE",
+       headers: { "Content-Type": "application/json" },
+       body: JSON.stringify({ id }),
+     });
+     const json = await res.json();
+     if (!res.ok) throw new Error(json.error || "Delete failed");
+
+     setCateringRequests((prev) => prev.filter((c) => c.id !== id));
+   } catch (error) {
+     console.error("Error deleting catering request:", error);
+     alert("Failed to delete catering request");
+   }
+ };
+
 
     const updateOrderStatus = async (id: number, newStatus: string) => {
-        try {
-            const { error } = await supabase
-                .from('orders')
-                .update({ status: newStatus })
-                .eq('id', id);
+      try {
+        const res = await fetch("/api/admin/orders", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id, status: newStatus }),
+        });
+        const json = await res.json();
+        if (!res.ok) throw new Error(json.error || "Update failed");
 
-            if (error) throw error;
-
-            setOrders(orders.map(order =>
-                order.id === id ? { ...order, status: newStatus } : order
-            ));
-        } catch (error) {
-            console.error('Error updating order status:', error);
-            alert('Failed to update order status');
-        }
+        setOrders((prev) =>
+          prev.map((order) =>
+            order.id === id ? { ...order, status: newStatus } : order,
+          ),
+        );
+      } catch (error) {
+        console.error("Error updating order status:", error);
+        alert("Failed to update order status");
+      }
     };
+
 
     return (
         <>
