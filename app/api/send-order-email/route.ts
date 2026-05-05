@@ -1,5 +1,6 @@
-import { Resend } from "resend";
 import { NextResponse } from "next/server";
+import { Resend } from "resend";
+import { escapeHtml } from "@/lib/emailHtml";
 
 type OrderItem = {
   name: string;
@@ -11,7 +12,6 @@ export async function POST(request: Request) {
   try {
     const apiKey = process.env.RESEND_API_KEY;
 
-    // Prevent build-time crash + give clear runtime error
     if (!apiKey) {
       return NextResponse.json(
         { error: "RESEND_API_KEY is not set" },
@@ -20,7 +20,6 @@ export async function POST(request: Request) {
     }
 
     const resend = new Resend(apiKey);
-
     const body = await request.json();
     const {
       customer_name,
@@ -39,31 +38,35 @@ export async function POST(request: Request) {
     };
 
     const itemsHTML = (items || [])
-      .map(
-        (item) => `
+      .map((item) => {
+        const price = Number(item.price);
+        const quantity = Number(item.quantity);
+
+        return `
           <tr>
-            <td style="padding: 8px; border-bottom: 1px solid #ddd;">${item.name}</td>
-            <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: center;">${item.quantity}</td>
-            <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">$${Number(item.price).toFixed(2)}</td>
-            <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">$${(Number(item.price) * Number(item.quantity)).toFixed(2)}</td>
+            <td style="padding: 8px; border-bottom: 1px solid #ddd;">${escapeHtml(item.name)}</td>
+            <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: center;">${quantity}</td>
+            <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">$${price.toFixed(2)}</td>
+            <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">$${(price * quantity).toFixed(2)}</td>
           </tr>
-        `,
-      )
+        `;
+      })
       .join("");
 
+    const total = Number(total_amount);
     const { data, error } = await resend.emails.send({
       from: "Ajora Kitchen <onboarding@resend.dev>",
       to: ["fassiliss@gmail.com"],
       replyTo: customer_email,
-      subject: `New Order from ${customer_name} - $${Number(total_amount).toFixed(2)}`,
+      subject: `New Order from ${customer_name} - $${total.toFixed(2)}`,
       html: `
-        <h2>🍽️ New Online Order!</h2>
+        <h2>New Online Order</h2>
 
         <h3>Customer Information:</h3>
-        <p><strong>Name:</strong> ${customer_name}</p>
-        <p><strong>Email:</strong> ${customer_email}</p>
-        <p><strong>Phone:</strong> ${customer_phone}</p>
-        <p><strong>Delivery Address:</strong><br>${customer_address}</p>
+        <p><strong>Name:</strong> ${escapeHtml(customer_name)}</p>
+        <p><strong>Email:</strong> ${escapeHtml(customer_email)}</p>
+        <p><strong>Phone:</strong> ${escapeHtml(customer_phone)}</p>
+        <p><strong>Delivery Address:</strong><br>${escapeHtml(customer_address)}</p>
 
         <h3>Order Details:</h3>
         <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
@@ -82,7 +85,7 @@ export async function POST(request: Request) {
             <tr style="background-color: #fee2e2;">
               <td colspan="3" style="padding: 12px; text-align: right; font-weight: bold;">TOTAL:</td>
               <td style="padding: 12px; text-align: right; font-weight: bold; color: #dc2626;">
-                $${Number(total_amount).toFixed(2)}
+                $${total.toFixed(2)}
               </td>
             </tr>
           </tfoot>
@@ -98,10 +101,10 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({ data });
-  } catch (error: any) {
-    console.error("Catch error:", error);
+  } catch (error) {
+    console.error("Order email error:", error);
     return NextResponse.json(
-      { error: error?.message || "Server error" },
+      { error: error instanceof Error ? error.message : "Server error" },
       { status: 500 },
     );
   }

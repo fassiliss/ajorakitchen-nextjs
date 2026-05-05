@@ -1,65 +1,73 @@
-import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
-import bcrypt from 'bcryptjs';
-import { SignJWT } from 'jose';
-import { cookies } from 'next/headers';
+import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
+import bcrypt from "bcryptjs";
+import { SignJWT } from "jose";
 
-const JWT_SECRET = new TextEncoder().encode(
-    process.env.JWT_SECRET || 'your-secret-key-change-this-in-production'
-);
+const jwtSecret = process.env.JWT_SECRET;
+
+function getEncodedSecret() {
+  if (!jwtSecret) {
+    throw new Error("JWT_SECRET is not set");
+  }
+
+  return new TextEncoder().encode(jwtSecret);
+}
+
+async function isValidPassword(password: string) {
+  const passwordHash = process.env.ADMIN_PASSWORD_HASH;
+  const plainPassword = process.env.ADMIN_PASSWORD;
+
+  if (passwordHash) {
+    return bcrypt.compare(password, passwordHash);
+  }
+
+  return Boolean(plainPassword) && password === plainPassword;
+}
 
 export async function POST(request: Request) {
-    try {
-        const { username, password } = await request.json();
+  try {
+    const { username, password } = (await request.json()) as {
+      username?: string;
+      password?: string;
+    };
 
-        // Get user from database
-        const { data: user, error } = await supabase
-            .from('admin_users')
-            .select('*')
-            .eq('username', username)
-            .single();
+    const expectedUsername = process.env.ADMIN_USERNAME || "admin";
 
-        if (error || !user) {
-            return NextResponse.json(
-                { error: 'Invalid username or password' },
-                { status: 401 }
-            );
-        }
-
-        // Verify password
-        const isValid = await bcrypt.compare(password, user.password_hash);
-
-        if (!isValid) {
-            return NextResponse.json(
-                { error: 'Invalid username or password' },
-                { status: 401 }
-            );
-        }
-
-        // Create JWT token
-        const token = await new SignJWT({ userId: user.id, username: user.username })
-            .setProtectedHeader({ alg: 'HS256' })
-            .setExpirationTime('24h')
-            .sign(JWT_SECRET);
-
-        // Set cookie
-        const cookieStore = await cookies();
-        cookieStore.set('admin-token', token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax',
-            maxAge: 60 * 60 * 24, // 24 hours
-        });
-
-        return NextResponse.json({
-            success: true,
-            user: { id: user.id, username: user.username },
-        });
-    } catch (error) {
-        console.error('Login error:', error);
-        return NextResponse.json(
-            { error: 'Internal server error' },
-            { status: 500 }
-        );
+    if (
+      !username ||
+      !password ||
+      username !== expectedUsername ||
+      !(await isValidPassword(password))
+    ) {
+      return NextResponse.json(
+        { error: "Invalid username or password" },
+        { status: 401 },
+      );
     }
+
+    const token = await new SignJWT({ username })
+      .setProtectedHeader({ alg: "HS256" })
+      .setExpirationTime("24h")
+      .sign(getEncodedSecret());
+
+    const cookieStore = await cookies();
+    cookieStore.set("admin-token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24,
+      path: "/",
+    });
+
+    return NextResponse.json({
+      success: true,
+      user: { username },
+    });
+  } catch (error) {
+    console.error("Login error:", error);
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : "Internal server error" },
+      { status: 500 },
+    );
+  }
 }

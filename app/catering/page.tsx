@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { supabase } from '@/lib/supabase';
 
 export default function CateringPage() {
     const [formData, setFormData] = useState({
@@ -30,19 +29,16 @@ export default function CateringPage() {
         setError('');
 
         try {
-            // Save to Supabase
-            const { error } = await supabase
-                .from('catering_requests')
-                .insert([formData]);
-
-            if (error) throw error;
-
-            // Send email notification
-            await fetch('/api/send-catering-email', {
+            const response = await fetch('/api/send-catering-email', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
             });
+
+            if (!response.ok) {
+                const result = await response.json().catch(() => null);
+                throw new Error(result?.error || 'Unable to send your catering request. Please call us instead.');
+            }
 
             setSuccess(true);
             setFormData({
@@ -56,8 +52,8 @@ export default function CateringPage() {
             });
 
             setTimeout(() => setSuccess(false), 5000);
-        } catch (err: any) {
-            setError(err.message || 'Something went wrong. Please try again.');
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
         } finally {
             setSubmitting(false);
         }
@@ -99,7 +95,7 @@ export default function CateringPage() {
                                 offering customized catering services to bring the rich flavors of Ethiopian cuisine to your special occasion.
                             </p>
                             <p className="text-lg text-gray-700 mt-4 font-semibold">
-                                We look forward to serving you, whether you're dining in or celebrating with us at your next event!
+                                We look forward to serving you, whether you&apos;re dining in or celebrating with us at your next event!
                             </p>
                         </div>
 
@@ -107,7 +103,7 @@ export default function CateringPage() {
                         {success && (
                             <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-8 rounded max-w-3xl mx-auto">
                                 <p className="font-bold">✅ Catering request submitted successfully!</p>
-                                <p>We'll review your request and contact you shortly with pricing and availability.</p>
+                                <p>We&apos;ll review your request and contact you shortly with pricing and availability.</p>
                             </div>
                         )}
 

@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { supabase } from '@/lib/supabase';
 
 export default function ContactPage() {
     const [formData, setFormData] = useState({
@@ -27,21 +26,17 @@ export default function ContactPage() {
         setError('');
 
         try {
-            // Save to Supabase
-            const { data, error } = await supabase
-                .from('contact_messages')
-                .insert([formData]);
-
-            if (error) throw error;
-
-            // Send email notification
-            await fetch('/api/send-contact-email', {
+            const response = await fetch('/api/send-contact-email', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
             });
 
-            // Success!
+            if (!response.ok) {
+                const result = await response.json().catch(() => null);
+                throw new Error(result?.error || 'Unable to send your message. Please call us instead.');
+            }
+
             setSuccess(true);
             setFormData({
                 name: '',
@@ -51,8 +46,8 @@ export default function ContactPage() {
             });
 
             setTimeout(() => setSuccess(false), 5000);
-        } catch (err: any) {
-            setError(err.message || 'Something went wrong. Please try again.');
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
         } finally {
             setSubmitting(false);
         }
@@ -90,7 +85,7 @@ export default function ContactPage() {
                                 <h2 className="text-4xl font-bold mb-8">Get In Touch</h2>
                                 <p className="text-gray-600 mb-8 text-lg">
                                     Have questions or want to learn more about Ajora Ethiopian Kitchen?
-                                    We'd love to hear from you!
+                                    We&apos;d love to hear from you!
                                 </p>
 
                                 {/* Contact Details */}
@@ -168,7 +163,7 @@ export default function ContactPage() {
                                 {success && (
                                     <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded">
                                         <p className="font-bold">✅ Message sent successfully!</p>
-                                        <p>We'll get back to you soon.</p>
+                                        <p>We&apos;ll get back to you soon.</p>
                                     </div>
                                 )}
 
