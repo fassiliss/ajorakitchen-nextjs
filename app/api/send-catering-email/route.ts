@@ -1,11 +1,11 @@
-import { Resend } from "resend";
 import { NextResponse } from "next/server";
+import { Resend } from "resend";
+import { escapeHtml, textOrFallback } from "@/lib/emailHtml";
 
 export async function POST(request: Request) {
   try {
     const apiKey = process.env.RESEND_API_KEY;
 
-    // Prevent build-time crash + give clear runtime error
     if (!apiKey) {
       return NextResponse.json(
         { error: "RESEND_API_KEY is not set" },
@@ -14,7 +14,6 @@ export async function POST(request: Request) {
     }
 
     const resend = new Resend(apiKey);
-
     const body = await request.json();
     const {
       first_name,
@@ -40,26 +39,26 @@ export async function POST(request: Request) {
       replyTo: email,
       subject: `New Catering Request from ${first_name} ${last_name}`,
       html: `
-        <h2>🎉 New Catering Request!</h2>
+        <h2>New Catering Request</h2>
 
         <h3>Customer Information:</h3>
-        <p><strong>Name:</strong> ${first_name} ${last_name}</p>
-        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Name:</strong> ${escapeHtml(first_name)} ${escapeHtml(last_name)}</p>
+        <p><strong>Email:</strong> ${escapeHtml(email)}</p>
 
         <h3>Event Details:</h3>
-        <p><strong>Event Date:</strong> ${event_date || "Not specified"}</p>
-        <p><strong>Location:</strong> ${location || "Not specified"}</p>
-        <p><strong>Number of Guests:</strong> ${number_of_guests || "Not specified"}</p>
+        <p><strong>Event Date:</strong> ${textOrFallback(event_date)}</p>
+        <p><strong>Location:</strong> ${textOrFallback(location)}</p>
+        <p><strong>Number of Guests:</strong> ${textOrFallback(number_of_guests)}</p>
 
         <h3>Food Selections / Special Requests:</h3>
         <div style="background-color: #f3f4f6; padding: 15px; border-radius: 8px; margin: 15px 0;">
-          <p style="white-space: pre-wrap;">${food_selections}</p>
+          <p style="white-space: pre-wrap;">${escapeHtml(food_selections)}</p>
         </div>
 
         <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
 
         <p><em>Please contact the customer to discuss pricing and availability.</em></p>
-        <p><em>Reply to this email to respond directly to ${first_name}.</em></p>
+        <p><em>Reply to this email to respond directly to ${escapeHtml(first_name)}.</em></p>
       `,
     });
 
@@ -69,10 +68,10 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({ data });
-  } catch (error: any) {
-    console.error("Catch error:", error);
+  } catch (error) {
+    console.error("Catering email error:", error);
     return NextResponse.json(
-      { error: error?.message || "Server error" },
+      { error: error instanceof Error ? error.message : "Server error" },
       { status: 500 },
     );
   }

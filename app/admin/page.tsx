@@ -1,577 +1,82 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-
-
-
-interface Reservation {
-    id: number;
-    name: string;
-    email: string;
-    phone: string;
-    date: string;
-    time: string;
-    guests: string;
-    created_at: string;
-}
-
-interface ContactMessage {
-    id: number;
-    name: string;
-    email: string;
-    subject: string;
-    message: string;
-    created_at: string;
-}
-
-interface Order {
-    id: number;
-    customer_name: string;
-    customer_email: string;
-    customer_phone: string;
-    customer_address: string;
-    items: any[];
-    total_amount: number;
-    status: string;
-    created_at: string;
-}
-
-interface CateringRequest {
-    id: number;
-    first_name: string;
-    last_name: string;
-    email: string;
-    event_date: string;
-    location: string;
-    number_of_guests: string;
-    food_selections: string;
-    created_at: string;
-}
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
 
 export default function AdminPage() {
-    const [reservations, setReservations] = useState<Reservation[]>([]);
-    const [messages, setMessages] = useState<ContactMessage[]>([]);
-    const [orders, setOrders] = useState<Order[]>([]);
-    const [cateringRequests, setCateringRequests] = useState<CateringRequest[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [activeTab, setActiveTab] = useState<'orders' | 'reservations' | 'messages' | 'catering'>('orders');
+  const logout = async () => {
+    await fetch("/api/auth/logout", { method: "POST" });
+    window.location.href = "/admin/login";
+  };
 
-    useEffect(() => {
-        fetchData();
-    }, []);
+  return (
+    <>
+      <Header />
 
-    const fetchData = async () => {
-      try {
-        const [rRes, mRes, oRes, cRes] = await Promise.all([
-          fetch("/api/admin/reservations", { cache: "no-store" }),
-          fetch("/api/admin/messages", { cache: "no-store" }),
-          fetch("/api/admin/orders", { cache: "no-store" }),
-          fetch("/api/admin/catering", { cache: "no-store" }),
-        ]);
-
-        const rJson = await rRes.json();
-        const mJson = await mRes.json();
-        const oJson = await oRes.json();
-        const cJson = await cRes.json();
-
-        if (!rRes.ok)
-          throw new Error(rJson.error || "Failed to load reservations");
-        if (!mRes.ok) throw new Error(mJson.error || "Failed to load messages");
-        if (!oRes.ok) throw new Error(oJson.error || "Failed to load orders");
-        if (!cRes.ok) throw new Error(cJson.error || "Failed to load catering");
-
-        setReservations(rJson.reservations || []);
-        setMessages(mJson.messages || []);
-        setOrders(oJson.orders || []);
-        setCateringRequests(cJson.cateringRequests || []);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-
-    const deleteReservation = async (id: number) => {
-      if (!confirm("Are you sure you want to delete this reservation?")) return;
-      try {
-        const res = await fetch("/api/admin/reservations", {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ id }),
-        });
-        const json = await res.json();
-        if (!res.ok) throw new Error(json.error || "Delete failed");
-        setReservations((prev) => prev.filter((r) => r.id !== id));
-      } catch (error) {
-        console.error("Error deleting reservation:", error);
-        alert("Failed to delete reservation");
-      }
-    };
-
-
-    const deleteMessage = async (id: number) => {
-      if (!confirm("Are you sure you want to delete this message?")) return;
-
-      try {
-        const res = await fetch("/api/admin/messages", {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ id }),
-        });
-        const json = await res.json();
-        if (!res.ok) throw new Error(json.error || "Delete failed");
-
-        setMessages((prev) => prev.filter((m) => m.id !== id));
-      } catch (error) {
-        console.error("Error deleting message:", error);
-        alert("Failed to delete message");
-      }
-    };
-
-
-   const deleteOrder = async (id: number) => {
-     if (!confirm("Are you sure you want to delete this order?")) return;
-
-     try {
-       const res = await fetch("/api/admin/orders", {
-         method: "DELETE",
-         headers: { "Content-Type": "application/json" },
-         body: JSON.stringify({ id }),
-       });
-       const json = await res.json();
-       if (!res.ok) throw new Error(json.error || "Delete failed");
-
-       setOrders((prev) => prev.filter((o) => o.id !== id));
-     } catch (error) {
-       console.error("Error deleting order:", error);
-       alert("Failed to delete order");
-     }
-   };
-
-
- const deleteCateringRequest = async (id: number) => {
-   if (!confirm("Are you sure you want to delete this catering request?"))
-     return;
-
-   try {
-     const res = await fetch("/api/admin/catering", {
-       method: "DELETE",
-       headers: { "Content-Type": "application/json" },
-       body: JSON.stringify({ id }),
-     });
-     const json = await res.json();
-     if (!res.ok) throw new Error(json.error || "Delete failed");
-
-     setCateringRequests((prev) => prev.filter((c) => c.id !== id));
-   } catch (error) {
-     console.error("Error deleting catering request:", error);
-     alert("Failed to delete catering request");
-   }
- };
-
-
-    const updateOrderStatus = async (id: number, newStatus: string) => {
-      try {
-        const res = await fetch("/api/admin/orders", {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ id, status: newStatus }),
-        });
-        const json = await res.json();
-        if (!res.ok) throw new Error(json.error || "Update failed");
-
-        setOrders((prev) =>
-          prev.map((order) =>
-            order.id === id ? { ...order, status: newStatus } : order,
-          ),
-        );
-      } catch (error) {
-        console.error("Error updating order status:", error);
-        alert("Failed to update order status");
-      }
-    };
-
-
-    return (
-        <>
-            <Header />
-
-            <div className="pt-20 min-h-screen bg-gray-50 dark:bg-gray-900">
-                {/* Hero */}
-                <section className="bg-red-600 text-white py-12">
-                    <div className="container mx-auto px-4">
-                        <div className="flex justify-between items-center">
-                            <div>
-                                <h1 className="text-4xl md:text-5xl font-bold mb-2">Admin Dashboard</h1>
-                                <p className="text-xl">Manage reservations, orders, messages, and catering requests</p>
-                            </div>
-                            <button
-                                onClick={async () => {
-                                    await fetch('/api/auth/logout', { method: 'POST' });
-                                    window.location.href = '/admin/login';
-                                }}
-                                className="bg-white text-red-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition"
-                            >
-                                🚪 Logout
-                            </button>
-                        </div>
-                    </div>
-                </section>
-
-                {/* Dashboard */}
-                <section className="py-12">
-                    <div className="container mx-auto px-4 max-w-7xl">
-
-                        {/* Stats Cards */}
-                        <div className="grid md:grid-cols-4 gap-6 mb-8">
-                            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-                                <div className="flex items-center">
-                                    <div className="text-4xl mr-4">📅</div>
-                                    <div>
-                                        <p className="text-gray-600 dark:text-gray-400 text-sm">Reservations</p>
-                                        <p className="text-3xl font-bold text-red-600">{reservations.length}</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-                                <div className="flex items-center">
-                                    <div className="text-4xl mr-4">🛒</div>
-                                    <div>
-                                        <p className="text-gray-600 dark:text-gray-400 text-sm">Orders</p>
-                                        <p className="text-3xl font-bold text-red-600">{orders.length}</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-                                <div className="flex items-center">
-                                    <div className="text-4xl mr-4">🎉</div>
-                                    <div>
-                                        <p className="text-gray-600 dark:text-gray-400 text-sm">Catering</p>
-                                        <p className="text-3xl font-bold text-red-600">{cateringRequests.length}</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-                                <div className="flex items-center">
-                                    <div className="text-4xl mr-4">✉️</div>
-                                    <div>
-                                        <p className="text-gray-600 dark:text-gray-400 text-sm">Messages</p>
-                                        <p className="text-3xl font-bold text-red-600">{messages.length}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Tabs */}
-                        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
-                            <div className="flex flex-wrap border-b dark:border-gray-700">
-                                <button
-                                    onClick={() => setActiveTab('orders')}
-                                    className={`flex-1 py-4 px-6 font-semibold transition ${
-                                        activeTab === 'orders'
-                                            ? 'bg-red-600 text-white'
-                                            : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600'
-                                    }`}
-                                >
-                                    🛒 Orders ({orders.length})
-                                </button>
-                                <button
-                                    onClick={() => setActiveTab('reservations')}
-                                    className={`flex-1 py-4 px-6 font-semibold transition ${
-                                        activeTab === 'reservations'
-                                            ? 'bg-red-600 text-white'
-                                            : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600'
-                                    }`}
-                                >
-                                    📅 Reservations ({reservations.length})
-                                </button>
-                                <button
-                                    onClick={() => setActiveTab('catering')}
-                                    className={`flex-1 py-4 px-6 font-semibold transition ${
-                                        activeTab === 'catering'
-                                            ? 'bg-red-600 text-white'
-                                            : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600'
-                                    }`}
-                                >
-                                    🎉 Catering ({cateringRequests.length})
-                                </button>
-                                <button
-                                    onClick={() => setActiveTab('messages')}
-                                    className={`flex-1 py-4 px-6 font-semibold transition ${
-                                        activeTab === 'messages'
-                                            ? 'bg-red-600 text-white'
-                                            : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600'
-                                    }`}
-                                >
-                                    ✉️ Messages ({messages.length})
-                                </button>
-                            </div>
-
-                            <div className="p-6">
-                                {loading ? (
-                                    <p className="text-center text-gray-600 dark:text-gray-400 py-12">Loading...</p>
-                                ) : (
-                                    <>
-                                        {/* Orders Tab */}
-                                        {activeTab === 'orders' && (
-                                            <div className="space-y-4">
-                                                {orders.length === 0 ? (
-                                                    <p className="text-center text-gray-600 dark:text-gray-400 py-12">No orders yet</p>
-                                                ) : (
-                                                    orders.map((order) => (
-                                                        <div key={order.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-6 hover:shadow-md transition">
-                                                            <div className="flex justify-between items-start mb-4">
-                                                                <h3 className="text-xl font-bold text-gray-900 dark:text-white">Order #{order.id}</h3>
-                                                                <button
-                                                                    onClick={() => deleteOrder(order.id)}
-                                                                    className="text-red-600 hover:text-red-700 font-semibold"
-                                                                >
-                                                                    🗑️ Delete
-                                                                </button>
-                                                            </div>
-
-                                                            <div className="grid md:grid-cols-2 gap-4 mb-4">
-                                                                <div>
-                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Customer</p>
-                                                                    <p className="font-semibold text-lg dark:text-white">{order.customer_name}</p>
-                                                                </div>
-                                                                <div>
-                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Email</p>
-                                                                    <p className="font-semibold dark:text-white">{order.customer_email}</p>
-                                                                </div>
-                                                                <div>
-                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Phone</p>
-                                                                    <p className="font-semibold dark:text-white">{order.customer_phone}</p>
-                                                                </div>
-                                                                <div>
-                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Total</p>
-                                                                    <p className="font-semibold text-xl text-red-600">${order.total_amount.toFixed(2)}</p>
-                                                                </div>
-                                                                <div className="md:col-span-2">
-                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Delivery Address</p>
-                                                                    <p className="font-semibold dark:text-white">{order.customer_address}</p>
-                                                                </div>
-                                                                <div className="md:col-span-2">
-                                                                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Items</p>
-                                                                    <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded">
-                                                                        {order.items.map((item: any, index: number) => (
-                                                                            <div key={index} className="flex justify-between mb-2">
-                                                                                <span className="dark:text-white">{item.quantity}x {item.name}</span>
-                                                                                <span className="font-semibold dark:text-white">${(item.price * item.quantity).toFixed(2)}</span>
-                                                                            </div>
-                                                                        ))}
-                                                                    </div>
-                                                                </div>
-                                                                <div>
-                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Ordered</p>
-                                                                    <p className="font-semibold dark:text-white">{new Date(order.created_at).toLocaleString()}</p>
-                                                                </div>
-                                                                <div>
-                                                                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Status</p>
-                                                                    <div className="flex gap-2">
-                                                                        <button
-                                                                            onClick={() => updateOrderStatus(order.id, 'pending')}
-                                                                            className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                                                                                order.status === 'pending'
-                                                                                    ? 'bg-yellow-200 text-yellow-800'
-                                                                                    : 'bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300 hover:bg-yellow-100'
-                                                                            }`}
-                                                                        >
-                                                                            Pending
-                                                                        </button>
-                                                                        <button
-                                                                            onClick={() => updateOrderStatus(order.id, 'completed')}
-                                                                            className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                                                                                order.status === 'completed'
-                                                                                    ? 'bg-green-200 text-green-800'
-                                                                                    : 'bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300 hover:bg-green-100'
-                                                                            }`}
-                                                                        >
-                                                                            Completed
-                                                                        </button>
-                                                                        <button
-                                                                            onClick={() => updateOrderStatus(order.id, 'cancelled')}
-                                                                            className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                                                                                order.status === 'cancelled'
-                                                                                    ? 'bg-red-200 text-red-800'
-                                                                                    : 'bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300 hover:bg-red-100'
-                                                                            }`}
-                                                                        >
-                                                                            Cancelled
-                                                                        </button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    ))
-                                                )}
-                                            </div>
-                                        )}
-
-                                        {/* Reservations Tab */}
-                                        {activeTab === 'reservations' && (
-                                            <div className="space-y-4">
-                                                {reservations.length === 0 ? (
-                                                    <p className="text-center text-gray-600 dark:text-gray-400 py-12">No reservations yet</p>
-                                                ) : (
-                                                    reservations.map((reservation) => (
-                                                        <div key={reservation.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-6 hover:shadow-md transition">
-                                                            <div className="flex justify-between items-start mb-4">
-                                                                <h3 className="text-xl font-bold text-gray-900 dark:text-white">Reservation #{reservation.id}</h3>
-                                                                <button
-                                                                    onClick={() => deleteReservation(reservation.id)}
-                                                                    className="text-red-600 hover:text-red-700 font-semibold"
-                                                                >
-                                                                    🗑️ Delete
-                                                                </button>
-                                                            </div>
-
-                                                            <div className="grid md:grid-cols-2 gap-4">
-                                                                <div>
-                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Name</p>
-                                                                    <p className="font-semibold text-lg dark:text-white">{reservation.name}</p>
-                                                                </div>
-                                                                <div>
-                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Email</p>
-                                                                    <p className="font-semibold dark:text-white">{reservation.email}</p>
-                                                                </div>
-                                                                <div>
-                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Phone</p>
-                                                                    <p className="font-semibold dark:text-white">{reservation.phone}</p>
-                                                                </div>
-                                                                <div>
-                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Date & Time</p>
-                                                                    <p className="font-semibold dark:text-white">{reservation.date} at {reservation.time}</p>
-                                                                </div>
-                                                                <div>
-                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Guests</p>
-                                                                    <p className="font-semibold dark:text-white">{reservation.guests} people</p>
-                                                                </div>
-                                                                <div>
-                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Submitted</p>
-                                                                    <p className="font-semibold dark:text-white">{new Date(reservation.created_at).toLocaleString()}</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    ))
-                                                )}
-                                            </div>
-                                        )}
-
-                                        {/* Catering Tab */}
-                                        {activeTab === 'catering' && (
-                                            <div className="space-y-4">
-                                                {cateringRequests.length === 0 ? (
-                                                    <p className="text-center text-gray-600 dark:text-gray-400 py-12">No catering requests yet</p>
-                                                ) : (
-                                                    cateringRequests.map((request) => (
-                                                        <div key={request.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-6 hover:shadow-md transition">
-                                                            <div className="flex justify-between items-start mb-4">
-                                                                <h3 className="text-xl font-bold text-gray-900 dark:text-white">Catering Request #{request.id}</h3>
-                                                                <button
-                                                                    onClick={() => deleteCateringRequest(request.id)}
-                                                                    className="text-red-600 hover:text-red-700 font-semibold"
-                                                                >
-                                                                    🗑️ Delete
-                                                                </button>
-                                                            </div>
-
-                                                            <div className="grid md:grid-cols-2 gap-4">
-                                                                <div>
-                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Name</p>
-                                                                    <p className="font-semibold text-lg dark:text-white">{request.first_name} {request.last_name}</p>
-                                                                </div>
-                                                                <div>
-                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Email</p>
-                                                                    <p className="font-semibold dark:text-white">{request.email}</p>
-                                                                </div>
-                                                                <div>
-                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Event Date</p>
-                                                                    <p className="font-semibold dark:text-white">{request.event_date || 'Not specified'}</p>
-                                                                </div>
-                                                                <div>
-                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Number of Guests</p>
-                                                                    <p className="font-semibold dark:text-white">{request.number_of_guests || 'Not specified'}</p>
-                                                                </div>
-                                                                <div className="md:col-span-2">
-                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Location</p>
-                                                                    <p className="font-semibold dark:text-white">{request.location || 'Not specified'}</p>
-                                                                </div>
-                                                                <div className="md:col-span-2">
-                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Food Selections / Request</p>
-                                                                    <p className="mt-1 text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 p-4 rounded whitespace-pre-wrap">{request.food_selections}</p>
-                                                                </div>
-                                                                <div>
-                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Submitted</p>
-                                                                    <p className="font-semibold dark:text-white">{new Date(request.created_at).toLocaleString()}</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    ))
-                                                )}
-                                            </div>
-                                        )}
-
-                                        {/* Messages Tab */}
-                                        {activeTab === 'messages' && (
-                                            <div className="space-y-4">
-                                                {messages.length === 0 ? (
-                                                    <p className="text-center text-gray-600 dark:text-gray-400 py-12">No messages yet</p>
-                                                ) : (
-                                                    messages.map((message) => (
-                                                        <div key={message.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-6 hover:shadow-md transition">
-                                                            <div className="flex justify-between items-start mb-4">
-                                                                <h3 className="text-xl font-bold text-gray-900 dark:text-white">Message #{message.id}</h3>
-                                                                <button
-                                                                    onClick={() => deleteMessage(message.id)}
-                                                                    className="text-red-600 hover:text-red-700 font-semibold"
-                                                                >
-                                                                    🗑️ Delete
-                                                                </button>
-                                                            </div>
-
-                                                            <div className="grid md:grid-cols-2 gap-4 mb-4">
-                                                                <div>
-                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Name</p>
-                                                                    <p className="font-semibold text-lg dark:text-white">{message.name}</p>
-                                                                </div>
-                                                                <div>
-                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Email</p>
-                                                                    <p className="font-semibold dark:text-white">{message.email}</p>
-                                                                </div>
-                                                                <div className="md:col-span-2">
-                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Subject</p>
-                                                                    <p className="font-semibold dark:text-white">{message.subject}</p>
-                                                                </div>
-                                                                <div className="md:col-span-2">
-                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Message</p>
-                                                                    <p className="mt-1 text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 p-4 rounded">{message.message}</p>
-                                                                </div>
-                                                                <div>
-                                                                    <p className="text-sm text-gray-600 dark:text-gray-400">Received</p>
-                                                                    <p className="font-semibold dark:text-white">{new Date(message.created_at).toLocaleString()}</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    ))
-                                                )}
-                                            </div>
-                                        )}
-                                    </>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                </section>
+      <main className="pt-20 min-h-screen bg-gray-50 dark:bg-gray-900">
+        <section className="bg-red-600 text-white py-12">
+          <div className="container mx-auto px-4">
+            <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+              <div>
+                <h1 className="text-4xl md:text-5xl font-bold mb-2">
+                  Admin Dashboard
+                </h1>
+                <p className="text-xl">
+                  Online requests are now delivered directly by email.
+                </p>
+              </div>
+              <button
+                onClick={logout}
+                className="bg-white text-red-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition self-start"
+              >
+                Logout
+              </button>
             </div>
+          </div>
+        </section>
 
-            <Footer />
-        </>
-    );
+        <section className="py-12">
+          <div className="container mx-auto px-4 max-w-4xl">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+                Email-only mode is active
+              </h2>
+              <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed">
+                Orders, reservations, contact messages, and catering requests
+                are no longer saved in a database. Each submission is sent to
+                the restaurant email inbox, so use email as the source of truth
+                for customer follow-up.
+              </p>
+              <div className="mt-8 grid gap-4 sm:grid-cols-2">
+                <a
+                  href="mailto:fassiliss@gmail.com"
+                  className="block rounded-lg border border-gray-200 dark:border-gray-700 p-5 hover:border-red-500 transition"
+                >
+                  <p className="font-semibold text-gray-900 dark:text-white">
+                    Check Website Requests
+                  </p>
+                  <p className="text-gray-600 dark:text-gray-400 mt-1">
+                    Open the inbox where form submissions arrive.
+                  </p>
+                </a>
+                <a
+                  href="/order"
+                  className="block rounded-lg border border-gray-200 dark:border-gray-700 p-5 hover:border-red-500 transition"
+                >
+                  <p className="font-semibold text-gray-900 dark:text-white">
+                    Test Online Order
+                  </p>
+                  <p className="text-gray-600 dark:text-gray-400 mt-1">
+                    Place a sample order when you want to verify email delivery.
+                  </p>
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <Footer />
+    </>
+  );
 }

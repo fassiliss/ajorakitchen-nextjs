@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import ThemeToggle from './ThemeToggle';
 
@@ -13,9 +14,11 @@ export default function Header() {
                 <div className="flex justify-between items-center">
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-3">
-                        <img
+                        <Image
                             src="/images/ajora-1.webp"
                             alt="Ajora Ethiopian Kitchen"
+                            width={48}
+                            height={48}
                             className="h-12 w-12 object-contain"
                         />
 

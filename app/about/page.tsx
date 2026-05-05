@@ -50,7 +50,7 @@ export default function AboutPage() {
                             <p className="text-gray-700 leading-relaxed mb-6">
                                 For years, Ajora Ethiopian Kitchen has been a go-to spot for those craving rich,
                                 spice-infused stews, slow-cooked meats, and the communal dining experience that
-                                Ethiopian food is known for. Whether it's our perfectly seasoned Doro Wot (spicy
+                                Ethiopian food is known for. Whether it&apos;s our perfectly seasoned Doro Wot (spicy
                                 chicken stew), tender beef tibs, or a combination platter with an assortment of
                                 flavors, we aim to serve dishes that bring people together.
                             </p>

@@ -1,5 +1,6 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import Image from 'next/image';
 
 export default function Home() {
     return (
@@ -28,9 +29,11 @@ export default function Home() {
 
                 {/* Logo in the middle */}
                 <div className="flex justify-center mb-6">
-                    <img
+                    <Image
                         src="/images/ajora-1.webp"
                         alt="Ajora Ethiopian Kitchen Logo"
+                        width={160}
+                        height={160}
                         className="w-32 h-32 md:w-40 md:h-40 rounded-full shadow-2xl"
                     />
                 </div>
@@ -82,10 +85,12 @@ export default function Home() {
                             creativity, and excellence.
                         </p>
                     </div>
-                    <div>
-                        <img
+                    <div className="relative h-64 w-full">
+                        <Image
                             src="/images/ajora-2.png"
                             alt="Ajora Ethiopian Kitchen Interior"
+                            fill
+                            sizes="(min-width: 768px) 50vw, 100vw"
                             className="w-full h-64 object-cover rounded-lg shadow-lg"
                         />
                     </div>
@@ -105,11 +110,15 @@ export default function Home() {
             <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
                 {/* Menu Item 1 */}
                 <div className="bg-white dark:bg-gray-700 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition">
-                    <img
+                    <div className="relative h-48 w-full">
+                    <Image
                         src="/images/ajora-3.png"
                         alt="Special Dish"
+                        fill
+                        sizes="(min-width: 768px) 33vw, 100vw"
                         className="h-48 w-full object-cover"
                     />
+                    </div>
                     <div className="p-6">
                         <h3 className="text-2xl font-bold mb-2 dark:text-white">Special Dish</h3>
                         <p className="text-gray-600 dark:text-gray-400 mb-4">Delicious and flavorful, made with love</p>
@@ -128,14 +137,18 @@ export default function Home() {
                 {/* Menu Item 2 */}
                 {/* Menu Item 2 */}
                 <div className="bg-white dark:bg-gray-700 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition">
-                    <img
+                    <div className="relative h-48 w-full">
+                    <Image
                         src="/images/ajora-4.png"
                         alt="Special Dish"
+                        fill
+                        sizes="(min-width: 768px) 33vw, 100vw"
                         className="h-48 w-full object-cover"
                     />
+                    </div>
                     <div className="p-6">
-                        <h3 className="text-2xl font-bold mb-2 dark:text-white">Chef's Choice</h3>
-                        <p className="text-gray-600 dark:text-gray-400 mb-4">Our chef's recommended specialty</p>
+                        <h3 className="text-2xl font-bold mb-2 dark:text-white">Chef&apos;s Choice</h3>
+                        <p className="text-gray-600 dark:text-gray-400 mb-4">Our chef&apos;s recommended specialty</p>
                         <div className="flex justify-between items-center">
                             <span className="text-2xl font-bold text-red-600">$29.99</span>
                             <a
@@ -151,11 +164,15 @@ export default function Home() {
                 {/* Menu Item 3 */}
                 {/* Menu Item 2 */}
                 <div className="bg-white dark:bg-gray-700 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition">
-                    <img
+                    <div className="relative h-48 w-full">
+                    <Image
                         src="/images/ajora-5.png"
                         alt="Special Dish"
+                        fill
+                        sizes="(min-width: 768px) 33vw, 100vw"
                         className="h-48 w-full object-cover"
                     />
+                    </div>
                     <div className="p-6">
                         <h3 className="text-2xl font-bold mb-2 dark:text-white">House Special</h3>
                         <p className="text-gray-600 dark:text-gray-400 mb-4">A customer favorite for years</p>
@@ -188,5 +205,3 @@ export default function Home() {
 </>
 );
 }
-
-

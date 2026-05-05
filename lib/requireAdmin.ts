@@ -2,18 +2,17 @@ import { cookies } from "next/headers";
 import { jwtVerify } from "jose";
 
 const secret = process.env.JWT_SECRET;
-if (!secret) throw new Error("JWT_SECRET is not set");
-
-const JWT_SECRET = new TextEncoder().encode(secret);
 
 export async function requireAdmin() {
-  const cookieStore = await cookies(); // ✅ await cookies()
+  if (!secret) throw new Error("UNAUTHORIZED");
+
+  const cookieStore = await cookies();
   const token = cookieStore.get("admin-token")?.value;
 
   if (!token) throw new Error("UNAUTHORIZED");
 
   try {
-    await jwtVerify(token, JWT_SECRET);
+    await jwtVerify(token, new TextEncoder().encode(secret));
     return true;
   } catch {
     throw new Error("UNAUTHORIZED");

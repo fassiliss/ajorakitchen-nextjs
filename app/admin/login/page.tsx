@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
@@ -31,8 +32,8 @@ export default function LoginPage() {
             // Redirect to admin dashboard
             router.push('/admin');
             router.refresh();
-        } catch (err: any) {
-            setError(err.message);
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Login failed');
         } finally {
             setLoading(false);
         }
@@ -93,9 +94,9 @@ export default function LoginPage() {
                 </form>
 
                 <div className="mt-6 text-center">
-                    <a href="/" className="text-red-600 hover:text-red-700">
+                    <Link href="/" className="text-red-600 hover:text-red-700">
                         ← Back to Website
-                    </a>
+                    </Link>
                 </div>
             </div>
         </div>

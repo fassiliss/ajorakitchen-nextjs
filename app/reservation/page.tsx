@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { supabase } from '@/lib/supabase';
 
 export default function ReservationPage() {
     const [formData, setFormData] = useState({
@@ -29,17 +28,16 @@ export default function ReservationPage() {
         setError('');
 
         try {
-            const { data, error } = await supabase
-                .from('reservations')
-                .insert([formData]);
-
-            if (error) throw error;
-
-            await fetch('/api/send-reservation-email', {
+            const response = await fetch('/api/send-reservation-email', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),
             });
+
+            if (!response.ok) {
+                const result = await response.json().catch(() => null);
+                throw new Error(result?.error || 'Unable to send your reservation request. Please call us instead.');
+            }
 
             setSuccess(true);
             setFormData({
@@ -52,8 +50,8 @@ export default function ReservationPage() {
             });
 
             setTimeout(() => setSuccess(false), 5000);
-        } catch (err: any) {
-            setError(err.message || 'Something went wrong. Please try again.');
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
         } finally {
             setSubmitting(false);
         }
@@ -87,7 +85,7 @@ export default function ReservationPage() {
                         {success && (
                             <div className="bg-green-100 dark:bg-green-900 border-l-4 border-green-500 text-green-700 dark:text-green-300 p-4 mb-8 rounded">
                                 <p className="font-bold">✅ Reservation request received!</p>
-                                <p>We'll contact you shortly to confirm your reservation.</p>
+                                <p>We&apos;ll contact you shortly to confirm your reservation.</p>
                             </div>
                         )}
 

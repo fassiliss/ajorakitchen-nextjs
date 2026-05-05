@@ -1,11 +1,11 @@
-import { Resend } from "resend";
 import { NextResponse } from "next/server";
+import { Resend } from "resend";
+import { escapeHtml } from "@/lib/emailHtml";
 
 export async function POST(request: Request) {
   try {
     const apiKey = process.env.RESEND_API_KEY;
 
-    // Prevent build-time crash + clear runtime error
     if (!apiKey) {
       return NextResponse.json(
         { error: "RESEND_API_KEY is not set" },
@@ -14,7 +14,6 @@ export async function POST(request: Request) {
     }
 
     const resend = new Resend(apiKey);
-
     const body = await request.json();
     const { name, email, phone, date, time, guests } = body as {
       name: string;
@@ -32,12 +31,12 @@ export async function POST(request: Request) {
       subject: `New Reservation: ${name} - ${date} at ${time}`,
       html: `
         <h2>New Reservation Request</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Phone:</strong> ${phone}</p>
-        <p><strong>Date:</strong> ${date}</p>
-        <p><strong>Time:</strong> ${time}</p>
-        <p><strong>Guests:</strong> ${guests}</p>
+        <p><strong>Name:</strong> ${escapeHtml(name)}</p>
+        <p><strong>Email:</strong> ${escapeHtml(email)}</p>
+        <p><strong>Phone:</strong> ${escapeHtml(phone)}</p>
+        <p><strong>Date:</strong> ${escapeHtml(date)}</p>
+        <p><strong>Time:</strong> ${escapeHtml(time)}</p>
+        <p><strong>Guests:</strong> ${escapeHtml(guests)}</p>
         <br />
         <p>Please contact the customer to confirm the reservation.</p>
       `,
@@ -49,10 +48,10 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({ data });
-  } catch (error: any) {
-    console.error("Catch error:", error);
+  } catch (error) {
+    console.error("Reservation email error:", error);
     return NextResponse.json(
-      { error: error?.message || "Server error" },
+      { error: error instanceof Error ? error.message : "Server error" },
       { status: 500 },
     );
   }

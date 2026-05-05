@@ -1,46 +1,19 @@
 import { NextResponse } from "next/server";
-import { supabaseAdmin } from "@/lib/supabaseAdmin";
-import { requireAdmin } from "@/lib/requireAdmin";
+import { ensureAdmin } from "@/lib/adminApi";
 
 export async function GET() {
-  try {
-    await requireAdmin();
+  const unauthorized = await ensureAdmin();
+  if (unauthorized) return unauthorized;
 
-    const { data, error } = await supabaseAdmin
-      .from("catering_requests")
-      .select("*")
-      .order("created_at", { ascending: false });
-
-    if (error) throw error;
-    return NextResponse.json({ cateringRequests: data ?? [] });
-  } catch (e: any) {
-    const status = e?.message === "UNAUTHORIZED" ? 401 : 500;
-    return NextResponse.json(
-      { error: e?.message || "Server error" },
-      { status },
-    );
-  }
+  return NextResponse.json({ cateringRequests: [] });
 }
 
-export async function DELETE(req: Request) {
-  try {
-    await requireAdmin();
+export async function DELETE() {
+  const unauthorized = await ensureAdmin();
+  if (unauthorized) return unauthorized;
 
-    const { id } = await req.json();
-    if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
-
-    const { error } = await supabaseAdmin
-      .from("catering_requests")
-      .delete()
-      .eq("id", id);
-    if (error) throw error;
-
-    return NextResponse.json({ ok: true });
-  } catch (e: any) {
-    const status = e?.message === "UNAUTHORIZED" ? 401 : 500;
-    return NextResponse.json(
-      { error: e?.message || "Server error" },
-      { status },
-    );
-  }
+  return NextResponse.json(
+    { error: "Catering requests are handled by email only." },
+    { status: 410 },
+  );
 }
